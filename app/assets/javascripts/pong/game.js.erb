@@ -1,4 +1,6 @@
-var gameProperties = {
+$( ".pages.pong" ).ready( function () {
+
+  var gameProperties = {
     screenWidth: 640,
     screenHeight: 480,
 
@@ -21,17 +23,17 @@ var gameProperties = {
 
     scoreToWin: 11,
 
-};
+  };
 
-var graphicAssets = {
+  var graphicAssets = {
     ballURL: "<%= asset_path('pong/ball.png') %>",
     ballName: 'ball',
 
     paddleURL: "<%= asset_path('pong/paddle.png') %>",
     paddleName: 'paddle'
-};
+  };
 
-var soundAssets = {
+  var soundAssets = {
     ballBounceURL: "<%= asset_path('ballBounce') %>",
     ballBounceName: 'ballBounce',
 
@@ -43,24 +45,24 @@ var soundAssets = {
 
     mp4URL: '.m4a',
     oggURL: '.ogg'
-};
+  };
 
-var fontAssets ={
+  var fontAssets ={
     scoreLeft_x: gameProperties.screenWidth * 0.25,
     scoreRight_x: gameProperties.screenWidth * 0.75,
     scoreTop_y: 10,
 
     scoreFontStyle:{font: '80px Arial', fill: '#FFFFFF', align: 'center'},
     instructionsFontStyle: {font: '24px Arial', fill: '#FFFFFF', align: 'center'},
-}
+  }
 
-var labels = {
-  clickToStart: 'Left paddle: A to move up, Z to move down.\n\nRight paddle: UP and DOWN arrow keys.\n\n- click to start -',
-  winner: 'Winner!',
-};
+  var labels = {
+    clickToStart: 'Left paddle: A to move up, Z to move down.\n\nRight paddle: UP and DOWN arrow keys.\n\n- click to start -',
+    winner: 'Winner!',
+  };
 
 
-var mainState = function(game) {
+  var mainState = function(game) {
     this.backgroundGraphics;
     this.ballSprite;
     this.paddleLeftSprite;
@@ -89,9 +91,9 @@ var mainState = function(game) {
     this.winnerRight;
 
     this.ballVelocity;
-};
+  };
 
-mainState.prototype = {
+  mainState.prototype = {
     preload: function () {
       game.load.image(graphicAssets.ballName, graphicAssets.ballURL);
       game.load.image(graphicAssets.paddleName, graphicAssets.paddleURL);
@@ -102,57 +104,57 @@ mainState.prototype = {
     },
 
     create: function () {
-        this.initGraphics();
-        this.initPhysics();
-        this.initKeyboard();
-        this.initSounds();
-        this.startDemo();
+      this.initGraphics();
+      this.initPhysics();
+      this.initKeyboard();
+      this.initSounds();
+      this.startDemo();
     },
 
     update: function () {
-        this.moveLeftPaddle();
-        this.moveRightPaddle();
-        game.physics.arcade.overlap(this.ballSprite, this.paddleGroup, this.collideWithPaddle, null, this);
+      this.moveLeftPaddle();
+      this.moveRightPaddle();
+      game.physics.arcade.overlap(this.ballSprite, this.paddleGroup, this.collideWithPaddle, null, this);
 
-        if (this.ballSprite.body.blocked.up || this.ballSprite.body.blocked.down || this.ballSprite.body.blocked.left || this.ballSprite.body.blocked.right) {
-            this.sndBallBounce.play();
-        }
+      if (this.ballSprite.body.blocked.up || this.ballSprite.body.blocked.down || this.ballSprite.body.blocked.left || this.ballSprite.body.blocked.right) {
+        this.sndBallBounce.play();
+      }
     },
 
     initGraphics: function () {
-        this.backgroundGraphics = game.add.graphics(0, 0);
-        this.backgroundGraphics.lineStyle(2, 0xFFFFFF, 1);
+      this.backgroundGraphics = game.add.graphics(0, 0);
+      this.backgroundGraphics.lineStyle(2, 0xFFFFFF, 1);
 
-        for (var y = 0; y < gameProperties.screenHeight; y += gameProperties.dashSize * 2) {
-            this.backgroundGraphics.moveTo(game.world.centerX, y);
-            this.backgroundGraphics.lineTo(game.world.centerX, y + gameProperties.dashSize);
-        }
+      for (var y = 0; y < gameProperties.screenHeight; y += gameProperties.dashSize * 2) {
+        this.backgroundGraphics.moveTo(game.world.centerX, y);
+        this.backgroundGraphics.lineTo(game.world.centerX, y + gameProperties.dashSize);
+      }
 
-        this.ballSprite = game.add.sprite(game.world.centerX, game.world.centerY, graphicAssets.ballName);
-        this.ballSprite.anchor.set(0.5, 0.5);
+      this.ballSprite = game.add.sprite(game.world.centerX, game.world.centerY, graphicAssets.ballName);
+      this.ballSprite.anchor.set(0.5, 0.5);
 
-        this.paddleLeftSprite = game.add.sprite(gameProperties.paddleLeft_x, game.world.centerY, graphicAssets.paddleName);
-        this.paddleLeftSprite.anchor.set(0.5, 0.5);
+      this.paddleLeftSprite = game.add.sprite(gameProperties.paddleLeft_x, game.world.centerY, graphicAssets.paddleName);
+      this.paddleLeftSprite.anchor.set(0.5, 0.5);
 
-        this.paddleRightSprite = game.add.sprite(gameProperties.paddleRight_x, game.world.centerY, graphicAssets.paddleName);
-        this.paddleRightSprite.anchor.set(0.5, 0.5);
+      this.paddleRightSprite = game.add.sprite(gameProperties.paddleRight_x, game.world.centerY, graphicAssets.paddleName);
+      this.paddleRightSprite.anchor.set(0.5, 0.5);
 
-        this.tf_scoreLeft = game.add.text(fontAssets.scoreLeft_x,fontAssets.scoreTop_y, "0",fontAssets.scoreFontStyle);
-        this.tf_scoreLeft.anchor.set(0.5, 0);
+      this.tf_scoreLeft = game.add.text(fontAssets.scoreLeft_x,fontAssets.scoreTop_y, "0",fontAssets.scoreFontStyle);
+      this.tf_scoreLeft.anchor.set(0.5, 0);
 
-        this.tf_scoreRight = game.add.text(fontAssets.scoreRight_x, fontAssets.scoreTop_y, "0", fontAssets.scoreFontStyle);
-        this.tf_scoreRight.anchor.set(0.5, 0);
+      this.tf_scoreRight = game.add.text(fontAssets.scoreRight_x, fontAssets.scoreTop_y, "0", fontAssets.scoreFontStyle);
+      this.tf_scoreRight.anchor.set(0.5, 0);
 
-        this.instructions = game.add.text(game.world.centerX, game.world.centerY, labels.clickToStart, fontAssets.instructionsFontStyle);
-        this.instructions.anchor.set(0.5, 0.5);
+      this.instructions = game.add.text(game.world.centerX, game.world.centerY, labels.clickToStart, fontAssets.instructionsFontStyle);
+      this.instructions.anchor.set(0.5, 0.5);
 
-        this.winnerLeft = game.add.text(gameProperties.screenWidth * 0.25, gameProperties.screenHeight * 0.25, labels.winner, fontAssets.instructionsFontStyle);
-        this.winnerLeft.anchor.set(0.5, 0.5);
+      this.winnerLeft = game.add.text(gameProperties.screenWidth * 0.25, gameProperties.screenHeight * 0.25, labels.winner, fontAssets.instructionsFontStyle);
+      this.winnerLeft.anchor.set(0.5, 0.5);
 
-        this.winnerRight = game.add.text(gameProperties.screenWidth * 0.75, gameProperties.screenHeight * 0.25, labels.winner, fontAssets.instructionsFontStyle);
-        this.winnerRight.anchor.set(0.5, 0.5);
+      this.winnerRight = game.add.text(gameProperties.screenWidth * 0.75, gameProperties.screenHeight * 0.25, labels.winner, fontAssets.instructionsFontStyle);
+      this.winnerRight.anchor.set(0.5, 0.5);
 
-        this.hideTextFields();
+      this.hideTextFields();
     },
 
     initPhysics: function() {
@@ -178,17 +180,17 @@ mainState.prototype = {
     },
 
     initKeyboard: function () {
-        this.paddleLeft_up = game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.paddleLeft_down = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+      this.paddleLeft_up = game.input.keyboard.addKey(Phaser.Keyboard.A);
+      this.paddleLeft_down = game.input.keyboard.addKey(Phaser.Keyboard.Z);
 
-        this.paddleRight_up = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-        this.paddleRight_down = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+      this.paddleRight_up = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+      this.paddleRight_down = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     },
 
     initSounds: function(){
-        this.sndBallHit = game.add.audio(soundAssets.ballHitName);
-        this.sndBallBounce = game.add.audio(soundAssets.ballBounceName);
-        this.sndBallMissed = game.add.audio(soundAssets.ballMissedName);
+      this.sndBallHit = game.add.audio(soundAssets.ballHitName);
+      this.sndBallBounce = game.add.audio(soundAssets.ballBounceName);
+      this.sndBallMissed = game.add.audio(soundAssets.ballMissedName);
     },
 
     startDemo: function() {
@@ -238,108 +240,108 @@ mainState.prototype = {
       game.physics.arcade.checkCollision.right = enabled;
     },
     moveLeftPaddle: function () {
-       if (this.paddleLeft_up.isDown)
-       {
-           this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
-       }
-       else if (this.paddleLeft_down.isDown)
-       {
-           this.paddleLeftSprite.body.velocity.y = gameProperties.paddleVelocity;
-       } else {
-           this.paddleLeftSprite.body.velocity.y = 0;
-        }
-           if(this.paddleLeftSprite.body.y < gameProperties.paddleTopGap) {
-            this.paddleLeftSprite.body.y = gameProperties.paddleTopGap;
-
-       }
-   },
-
-   moveRightPaddle: function () {
-       if (this.paddleRight_up.isDown)
-       {
-           this.paddleRightSprite.body.velocity.y = -gameProperties.paddleVelocity;
-       }
-       else if (this.paddleRight_down.isDown)
-       {
-           this.paddleRightSprite.body.velocity.y = gameProperties.paddleVelocity;
-       } else {
-           this.paddleRightSprite.body.velocity.y = 0;
-       }
-       if(this.paddleRightSprite.body.y < gameProperties.paddleTopGap) {
-            this.paddleRightSprite.body.y = gameProperties.paddleTopGap;
+      if (this.paddleLeft_up.isDown)
+      {
+        this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
       }
-   },
+      else if (this.paddleLeft_down.isDown)
+      {
+        this.paddleLeftSprite.body.velocity.y = gameProperties.paddleVelocity;
+      } else {
+        this.paddleLeftSprite.body.velocity.y = 0;
+      }
+      if(this.paddleLeftSprite.body.y < gameProperties.paddleTopGap) {
+        this.paddleLeftSprite.body.y = gameProperties.paddleTopGap;
+
+      }
+    },
+
+    moveRightPaddle: function () {
+      if (this.paddleRight_up.isDown)
+      {
+        this.paddleRightSprite.body.velocity.y = -gameProperties.paddleVelocity;
+      }
+      else if (this.paddleRight_down.isDown)
+      {
+        this.paddleRightSprite.body.velocity.y = gameProperties.paddleVelocity;
+      } else {
+        this.paddleRightSprite.body.velocity.y = 0;
+      }
+      if(this.paddleRightSprite.body.y < gameProperties.paddleTopGap) {
+        this.paddleRightSprite.body.y = gameProperties.paddleTopGap;
+      }
+    },
 
     collideWithPaddle: function (ball, paddle) {
-        this.sndBallHit.play();
+      this.sndBallHit.play();
       var returnAngle;
-        var segmentHit = Math.floor((ball.y - paddle.y)/gameProperties.paddleSegmentHeight);
+      var segmentHit = Math.floor((ball.y - paddle.y)/gameProperties.paddleSegmentHeight);
 
-        if (segmentHit >= gameProperties.paddleSegmentsMax) {
-            segmentHit = gameProperties.paddleSegmentsMax - 1;
-        } else if (segmentHit <= -gameProperties.paddleSegmentsMax) {
-            segmentHit = -(gameProperties.paddleSegmentsMax - 1);
-        }
-        if (paddle.x < gameProperties.screenWidth * 0.5) {
-            returnAngle = segmentHit * gameProperties.paddleSegmentAngle;
-            game.physics.arcade.velocityFromAngle(returnAngle, this.ballVelocity, this.ballSprite.body.velocity);
-        } else {
-            returnAngle = 180 - (segmentHit * gameProperties.paddleSegmentAngle);
-            if (returnAngle > 180) {
-                returnAngle -= 360;
-            }
-
-            game.physics.arcade.velocityFromAngle(returnAngle, this.ballVelocity, this.ballSprite.body.velocity);
+      if (segmentHit >= gameProperties.paddleSegmentsMax) {
+        segmentHit = gameProperties.paddleSegmentsMax - 1;
+      } else if (segmentHit <= -gameProperties.paddleSegmentsMax) {
+        segmentHit = -(gameProperties.paddleSegmentsMax - 1);
+      }
+      if (paddle.x < gameProperties.screenWidth * 0.5) {
+        returnAngle = segmentHit * gameProperties.paddleSegmentAngle;
+        game.physics.arcade.velocityFromAngle(returnAngle, this.ballVelocity, this.ballSprite.body.velocity);
+      } else {
+        returnAngle = 180 - (segmentHit * gameProperties.paddleSegmentAngle);
+        if (returnAngle > 180) {
+          returnAngle -= 360;
         }
 
-        this.ballReturnCount ++;
+        game.physics.arcade.velocityFromAngle(returnAngle, this.ballVelocity, this.ballSprite.body.velocity);
+      }
 
-        if(this.ballReturnCount >= gameProperties.ballReturnCount) {
-            this.ballReturnCount = 0;
-            this.ballVelocity += gameProperties.ballVelocityIncrement;
-        }
+      this.ballReturnCount ++;
+
+      if(this.ballReturnCount >= gameProperties.ballReturnCount) {
+        this.ballReturnCount = 0;
+        this.ballVelocity += gameProperties.ballVelocityIncrement;
+      }
     },
 
     ballOutOfBounds: function () {
       this.sndBallMissed.play();
 
       if (this.ballSprite.x < 0) {
-          this.missedSide = 'left';
-          this.scoreRight++;
+        this.missedSide = 'left';
+        this.scoreRight++;
       } else if (this.ballSprite.x > gameProperties.screenWidth) {
-          this.missedSide = 'right';
-          this.scoreLeft++;
+        this.missedSide = 'right';
+        this.scoreLeft++;
       }
 
       this.updateScoreTextFields();
-        if (this.scoreLeft >= gameProperties.scoreToWin) {
-            this.winnerLeft.visible = true;
-            this.startDemo();
+      if (this.scoreLeft >= gameProperties.scoreToWin) {
+        this.winnerLeft.visible = true;
+        this.startDemo();
       } else if (this.scoreRight >= gameProperties.scoreToWin) {
-            this.winnerRight.visible = true;
-            this.startDemo();
+        this.winnerRight.visible = true;
+        this.startDemo();
 
       } else {
-            this.resetBall();
+        this.resetBall();
       }
     },
 
-      resetScores: function(){
-        this.scoreLeft = 0;
-        this.scoreRight = 0;
-        this.updateScoreTextFields();
-      },
+    resetScores: function(){
+      this.scoreLeft = 0;
+      this.scoreRight = 0;
+      this.updateScoreTextFields();
+    },
 
-      updateScoreTextFields:function(){
-        this.tf_scoreLeft.text = this.scoreLeft;
-        this.tf_scoreRight.text = this.scoreRight;
-      },
+    updateScoreTextFields:function(){
+      this.tf_scoreLeft.text = this.scoreLeft;
+      this.tf_scoreRight.text = this.scoreRight;
+    },
 
-      hideTextFields: function() {
-        this.instructions.visible = false;
-        this.winnerRight.visible = false;
-        this.winnerLeft.visible = false;
-      },
+    hideTextFields: function() {
+      this.instructions.visible = false;
+      this.winnerRight.visible = false;
+      this.winnerLeft.visible = false;
+    },
 
 
     startBall: function() {
@@ -355,10 +357,11 @@ mainState.prototype = {
       game.physics.arcade.velocityFromAngle(randomAngle, gameProperties.ballVelocity, this.ballSprite.body.velocity);
     },
 
-};
+  };
 
-var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeight, Phaser.AUTO, 'gameDiv');
+  var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeight, Phaser.AUTO, 'gameDiv');
 
-game.state.add('main', mainState);
+  game.state.add('main', mainState);
 
-game.state.start('main');
+  game.state.start('main');
+} );
