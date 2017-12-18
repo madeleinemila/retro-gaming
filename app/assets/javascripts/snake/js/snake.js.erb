@@ -16,6 +16,7 @@ $( document ).ready( function () {
   let snake;
   let food;
   let cursors;
+  let wasd;
 
   // Directional constants
   const UP = 0;
@@ -175,6 +176,13 @@ $( document ).ready( function () {
     food = new Food( this, _.random( GRID_WIDTH ), _.random( GRID_HEIGHT ) );
 
     cursors = this.input.keyboard.createCursorKeys();
+    // console.log( Phaser.Input.Keyboard.KeyCodes );
+    wasd = {
+      up: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.W ),
+      down: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.S ),
+      left: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.A ),
+      right: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.D )
+    }
   }
 
   function update ( time ) {
@@ -204,16 +212,16 @@ $( document ).ready( function () {
       return;
     }
 
-    if ( cursors.left.isDown && snake2.direction !== RIGHT ) {
+    if ( wasd.left.isDown && snake2.direction !== RIGHT ) {
       snake2.direction = LEFT;
     }
-    if ( cursors.right.isDown && snake2.direction !== LEFT ) {
+    if ( wasd.right.isDown && snake2.direction !== LEFT ) {
       snake2.direction = RIGHT;
     }
-    if ( cursors.up.isDown && snake2.direction !== DOWN ) {
+    if ( wasd.up.isDown && snake2.direction !== DOWN ) {
       snake2.direction = UP;
     }
-    if ( cursors.down.isDown && snake2.direction !== UP ) {
+    if ( wasd.down.isDown && snake2.direction !== UP ) {
       snake2.direction = DOWN;
     }
     // check for collision with food every time snake2 is updated
