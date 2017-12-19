@@ -1,3 +1,18 @@
+// **************** HARDWARE CONTROLLER SOCKET *********************************
+
+
+let test = 0;
+//
+const socket = io.connect('http://localhost:3001');
+//
+socket.on('pressed', function(data) {
+  console.log(data.pressed);
+});
+
+
+
+//*****************************************************************************
+
 $( ".pages.pong" ).ready( function () {
 
   var gameProperties = {
@@ -240,9 +255,10 @@ $( ".pages.pong" ).ready( function () {
       game.physics.arcade.checkCollision.right = enabled;
     },
     moveLeftPaddle: function () {
-      if (this.paddleLeft_up.isDown)
+      if (this.paddleLeft_up.isDown || test === 1 )
       {
         this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
+        test = 0;
       }
       else if (this.paddleLeft_down.isDown)
       {

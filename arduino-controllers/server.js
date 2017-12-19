@@ -16,13 +16,13 @@ serialport.on('open', function(){
   console.log('Serial Port Opened');
   serialport.on('data', function(data){
       console.log(data[0]); // logging to terminal
-      io.emit('raw', { raw: data[0] });
+      io.emit('pressed', { pressed: data[0] });
   });
 });
 
 // needed to serve back up socket.io
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(3001, function(){
+  console.log('listening on *:3001');
 });
 
 
