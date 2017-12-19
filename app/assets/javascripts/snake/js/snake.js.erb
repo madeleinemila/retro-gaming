@@ -18,6 +18,92 @@ $( ".pages.snake" ).ready( function () {
   let cursors;
   let wasd;
 
+  // ************ START CONTROLS ***********************************************
+
+  const fetchLeft = () => {
+    $.get('http://yunone.local/arduino/digital/2')
+      .done((res) => {
+        console.log('LEFT', res);
+        // LEFT
+        cursors.left.isDown = false;
+        if (res[0] === '1') {
+          console.log( 'Going left...' );
+          cursors.left.isDown = true;
+        }
+      })
+      .fail(() => {
+        console.log( 'Left button read failed.' );
+      });
+    setTimeout( fetchLeft, 200 );
+  }
+
+
+
+  const fetchRight = () => {
+    $.get('http://yunone.local/arduino/digital/6')
+      .done((res) => {
+        console.log('RIGHT', res);
+        // RIGHT
+        cursors.right.isDown = false;
+        if (res[0] === '1') {
+          console.log( 'Going right...' );
+          cursors.right.isDown = true;
+        }
+      })
+      .fail(() => {
+        console.log( 'Right button read failed.' );
+      });
+    setTimeout( fetchRight, 200 );
+  }
+
+
+  const fetchUp = () => {
+    $.get('http://yunone.local/arduino/digital/4')
+      .done((res) => {
+        console.log('UP', res);
+        // UP
+        cursors.up.isDown = false;
+        if (res[0] === '1') {
+          console.log( 'Going up...' );
+          cursors.up.isDown = true;
+        }
+      })
+      .fail(() => {
+        console.log( 'Up button read failed.' );
+      });
+    setTimeout( fetchUp, 200 );
+  }
+
+
+
+  const fetchDown = () => {
+    $.get('http://yunone.local/arduino/digital/8')
+      .done((res) => {
+        console.log('DOWN', res);
+        // DOWN
+        cursors.down.isDown = false;
+        if (res[0] === '1') {
+          console.log( 'Going down...' );
+          cursors.down.isDown = true;
+        }
+      })
+      .fail(() => {
+        console.log( 'Down button read failed.' );
+      });
+    setTimeout( fetchDown, 200 );
+  }
+
+  $(document).ready(() => {
+    fetchLeft();
+    fetchRight();
+    fetchUp();
+    fetchDown();
+  });
+
+
+  // ********************** END CONTROLS ***************************************
+
+
   // Directional constants
   const UP = 0;
   const DOWN = 1;

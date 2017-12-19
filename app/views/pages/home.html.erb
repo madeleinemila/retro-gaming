@@ -1,6 +1,23 @@
-<h1>Home</h1>
 
-<nav>
-  <%= link_to 'snake', snake_path %>
-  <%= link_to 'Pong', pong_path %>
-<nav>
+<body>
+
+
+<div class = "container">
+  <h1>Home</h1>
+    <nav class ="the-grid">
+      <div class="border_snake"></div>
+      <div class="border_pong"></div>
+      <div class="border_space"></div>
+      <div class="ship"></div>
+      <div class ="snake"><%= link_to 'Snake', snake_path %></div>
+      <div class="pong"><%= link_to 'Ping', pong_path %></div>
+      <div class="space"><%= link_to 'Space', pong_path %></div>
+      <div class="controller"></div>
+      <div class="controller1"></div>
+      <div class="controller2"></div>
+      <div class="controller3"></div>
+      <div class="controller4"></div>
+      <div class="controller5"></div>
+    </nav>
+</div>
+</body>
