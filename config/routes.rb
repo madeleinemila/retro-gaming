@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get '/snake' => 'pages#snake'
   get '/pong' => 'pages#pong'
 
+  mount ActionCable.server => '/snake/cable'
+
 end
