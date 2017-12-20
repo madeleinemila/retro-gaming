@@ -41,15 +41,15 @@ console.log('space shooter game');
 
   function preload() {
     game.load.image('starfield', "<%=  asset_path('space/assets/starfield.png')%>");
-    game.load.image('ship', 'assets/player.png');
-    game.load.image('bullet', 'assets/bullet.png');
-    game.load.image('enemy-green', 'assets/enemy-green.png');
-    game.load.image('enemy-blue', 'assets/enemy-blue.png');
-    game.load.image('blueEnemyBullet', 'assets/enemy-blue-bullet.png');
-    game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
+    game.load.image('ship', "<%= asset_path('space/assets/player.png')%>");
+    game.load.image('bullet', "<%= asset_path('assets/bullet.png')%>)";
+    game.load.image('enemy-green', "<%= asset_path('assets/enemy-green.png')%>)";
+    game.load.image('enemy-blue', "<%= asset_path('assets/enemy-blue.png')%>)";
+    game.load.image('blueEnemyBullet', "<%= asset_path('assets/enemy-blue-bullet.png')%>)";
+    game.load.spritesheet('explosion', "<%= asset_path('assets/explode.png', 128, 128)%>)";
     game.load.bitmapFont('spacefont', 'https://raw.githubusercontent.com/jschomay/phaser-demo-game/master/assets/spacefont/spacefont.png', 'https://rawgit.com/jschomay/phaser-demo-game/master/assets/spacefont/spacefont.xml');
-    game.load.image('boss', 'assets/boss.png');
-    game.load.image('deathRay', 'assets/death-ray.png');
+    game.load.image('boss', "<%= asset_path('assets/boss.png')%>)";
+    game.load.image('deathRay', "<%= asset_path('assets/death-ray.png')%>)";
   }
 
   function create() {
