@@ -69,10 +69,9 @@ $( ".pages.pong" ).ready( function () {
     paddleSegmentsMax: 4,
     paddleSegmentHeight: 4,
     paddleSegmentAngle: 15,
-    paddleTopGap: 22,
+    paddleTopGap: 20,
 
-    ballVelocity: 500,
-    ballStartDelay: 2,
+    ballVelocity: 200, // CHANGED
     ballVelocityIncrement: 25,
     ballReturnCount: 4,
     ballRandomStartingAngleLeft: [-120, 120],
@@ -151,7 +150,13 @@ $( ".pages.pong" ).ready( function () {
     this.ballVelocity;
   };
 
+
+//  ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~
+
   mainState.prototype = {
+
+    //*************************************************************************
+
     preload: function () {
       game.load.image(graphicAssets.ballName, graphicAssets.ballURL);
       game.load.image(graphicAssets.paddleName, graphicAssets.paddleURL);
@@ -161,6 +166,8 @@ $( ".pages.pong" ).ready( function () {
       game.load.audio('ballMissed', '<%= asset_path('pong/ballMissed.ogg') %>');
     },
 
+    //*************************************************************************
+
     create: function () {
       this.initGraphics();
       this.initPhysics();
@@ -168,6 +175,8 @@ $( ".pages.pong" ).ready( function () {
       this.initSounds();
       this.startDemo();
     },
+
+    //*************************************************************************
 
     update: function () {
       this.moveLeftPaddle();
@@ -178,6 +187,8 @@ $( ".pages.pong" ).ready( function () {
         this.sndBallBounce.play();
       }
     },
+
+    //*************************************************************************
 
     initGraphics: function () {
       this.backgroundGraphics = game.add.graphics(0, 0);
@@ -217,7 +228,7 @@ $( ".pages.pong" ).ready( function () {
 
     initPhysics: function() {
       game.physics.startSystem(Phaser.Physics.ARCADE);
-      game.physics.enable(this.ballSprite);
+      game.physics.enable(this.ballSprite, Phaser.Physics.ARCADE); // CHANGED
 
       this.ballSprite.checkWorldBounds = true;
       this.ballSprite.body.collideWorldBounds = true;
@@ -270,18 +281,29 @@ $( ".pages.pong" ).ready( function () {
       this.hideTextFields();
     },
 
+    startBall: function() {
+      this.ballVelocity = gameProperties.ballVelocity;
+      console.log(`Inside initPhysics.startBall: ${this.ballVelocity}`);
+      this.ballReturnCount = 0;
+      this.ballSprite.visible = true;
+      // console.log( this.ballSprite );
+      var randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight.concat(gameProperties.ballRandomStartingAngleLeft));
+
+      if (this.missedSide == 'right') {
+        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight);
+      } else if (this.missedSide == 'left') {
+        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleLeft);
+      }
+      game.physics.arcade.velocityFromAngle(randomAngle, gameProperties.ballVelocity, this.ballSprite.body.velocity);
+    },
+
     resetBall: function(){
       this.ballSprite.reset(game.world.centerX, game.rnd.between(0, gameProperties.screenHeight));
       this.ballSprite.visible = false;
       game.time.events.add(Phaser.Timer.SECOND * gameProperties.ballStartDelay, this.startBall, this);
     },
 
-    startBall: function() {
-      this.ballVelocity = gameProperties.ballVelocity;
-      this.ballReturnCount = 0;
-    },
-
-    enablePaddles: function (enabled){
+    enablePaddles: function (enabled){  // uptohere
       this.paddleGroup.setAll('visible', enabled);
       this.paddleGroup.setAll('body.enable', enabled);
 
@@ -301,7 +323,6 @@ $( ".pages.pong" ).ready( function () {
       if (this.paddleLeft_up.isDown || hardwareU )
       {
         this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
-        
       }
       else if (this.paddleLeft_down.isDown || hardwareD )
       {
@@ -403,24 +424,14 @@ $( ".pages.pong" ).ready( function () {
     },
 
 
-    startBall: function() {
-      this.ballSprite.visible = true;
-      console.log( this.ballSprite );
-      var randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight.concat(gameProperties.ballRandomStartingAngleLeft));
 
-      if (this.missedSide == 'right') {
-        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight);
-      } else if (this.missedSide == 'left') {
-        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleLeft);
-      }
-      game.physics.arcade.velocityFromAngle(randomAngle, gameProperties.ballVelocity, this.ballSprite.body.velocity);
-    },
-
-  };
+  };  // end mainState.prototype
 
   var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeight, Phaser.AUTO, 'gameDiv');
 
   game.state.add('main', mainState);
 
   game.state.start('main');
-} );
+
+
+}); // end page ready
