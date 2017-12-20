@@ -17,7 +17,6 @@ const socket = io.connect('http://localhost:3001');
 // DOWN 54 off, 55 on
 
 socket.on('pressed', function(data) {
-  console.log(data.pressed);
 
   switch(data.pressed) {
     case 48:
