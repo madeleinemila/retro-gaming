@@ -7,8 +7,6 @@ $( ".pages.snake" ).ready( function () {
   let cursors;
   let wasd;
 
-  const SNAKE_START_LENGTH = 3;
-
   // Directional constants
   const UP = 1;
   const DOWN = 2;
@@ -35,13 +33,9 @@ $( ".pages.snake" ).ready( function () {
 
     snake = [];
     snake[0] = game.add.sprite( ( 8 * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
-    // for ( let i = 0; i < SNAKE_START_LENGTH; i++ ) {
-    //   snake[i] = game.add.sprite( ( ( i + 8 ) * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
-    // }
     snake.speed = 0;
     snake.grow = false;
     snake.alive = true;
-
 
     snake.updateDelay = 0;
 
