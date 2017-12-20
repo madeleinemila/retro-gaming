@@ -1,16 +1,5 @@
 $( ".pages.snake" ).ready( function () {
-  const config = {
-    type: Phaser.CANVAS,
-    width: 640,
-    height: 480,
-    backgroundColor: '#bfcc00',
-    parent: 'snake',
-    scene: {
-      preload: preload,
-      create: create,
-      update: update
-    }
-  }
+  const game = new Phaser.Game( 640, 480, Phaser.AUTO, 'snake', { preload: preload, create: create, update:update } );
 
   // Globals
   let snake;
@@ -18,264 +7,151 @@ $( ".pages.snake" ).ready( function () {
   let cursors;
   let wasd;
 
+  const SNAKE_START_LENGTH = 3;
 
   // Directional constants
-  const UP = 0;
-  const DOWN = 1;
-  const LEFT = 2;
-  const RIGHT = 3;
+  const UP = 1;
+  const DOWN = 2;
+  const LEFT = 3;
+  const RIGHT = 4;
+
+  // Canvas size
+  const CANVAS_WIDTH = 640;
+  const CANVAS_HEIGHT = 480;
 
   // Grid constants
-  const GRID_WIDTH = 39;
-  const GRID_HEIGHT = 29;
   const BLOCK_SIZE = 16;
-
-  const game = new Phaser.Game( config );
+  // Grid ranges from 0,0 - 39,29
+  const GRID_WIDTH = ( CANVAS_WIDTH / BLOCK_SIZE ) - 1;
+  const GRID_HEIGHT = ( CANVAS_HEIGHT / BLOCK_SIZE ) - 1;
 
   function preload () {
-    this.load.image( 'food', "<%= asset_path( 'snake/food.png' ) %>" );
-    this.load.image( 'body', "<%= asset_path( 'snake/body.png' ) %>" );
+    this.load.image( 'food', "<%= asset_path( 'snake/food.png' ) %>")
+    this.load.image( 'body', "<%= asset_path( 'snake/body.png' ) %>")
   }
 
   function create () {
-    // Create snake class
-    const Snake = new Phaser.Class( {
-      initialize: function Snake ( scene, x, y ) {
-        this.headPosition = new Phaser.Geom.Point( x, y );
-        this.body = scene.add.group();
+    game.stage.backgroundColor = '#bfcc00';
 
-        this.head = this.body.create( x * BLOCK_SIZE, y * BLOCK_SIZE, 'body' );
-        // setOrigin places body's top-left at 0,0 instead of placing body's center at 0,0
-        this.head.setOrigin(0);
+    snake = [];
+    for ( let i = 0; i < SNAKE_START_LENGTH; i++ ) {
+      snake[i] = game.add.sprite( 0 + ( i * BLOCK_SIZE ), 0, 'body' );
+    }
+    snake.speed = 0;
+    snake.grow = false;
 
-        this.tail = new Phaser.Geom.Point( x, y );
+    generateFood();
 
-        this.alive = true;
+    snake.updateDelay = 0;
 
-        this.speed = 100;
-        this.moveTime = 0;
-      },
-
-      update: function ( time ) {
-        if ( time >= this.moveTime ) {
-          return this.move( time );
-        }
-      },
-
-      // Snake - movement functions
-      // faceLeft: function () {
-      //   if ( this.direction !== RIGHT ) {
-      //     this.direction = LEFT;
-      //   }
-      // },
-      // faceRight: function () {
-      //   if ( this.direction !== LEFT ) {
-      //     this.direction = RIGHT;
-      //   }
-      // },
-      // faceUp: function () {
-      //   if ( this.direction !== DOWN ) {
-      //     this.direction = UP;
-      //   }
-      // },
-      // faceDown: function () {
-      //   if ( this.direction !== UP ) {
-      //     this.direction = DOWN;
-      //   }
-      // },
-
-      move: function ( time ) {
-        switch( this.direction ) {
-          case LEFT:
-          this.headPosition.x = Phaser.Math.Wrap( this.headPosition.x - 1, 0, 40 );
-          break;
-          case RIGHT:
-          this.headPosition.x = Phaser.Math.Wrap( this.headPosition.x + 1, 0, 40 );
-          break;
-          case UP:
-          this.headPosition.y = Phaser.Math.Wrap( this.headPosition.y - 1, 0, 30 );
-          break;
-          case DOWN:
-          this.headPosition.y = Phaser.Math.Wrap( this.headPosition.y + 1, 0, 30 );
-          break;
-        }
-
-        // Update the body segments and place newly created segments at this.tail
-        Phaser.Actions.ShiftPosition( this.body.getChildren(), this.headPosition.x * BLOCK_SIZE, this.headPosition.y * BLOCK_SIZE, 1, this.tail );
-
-        // If head has the same x,y coordinates as body, head has hit body
-        const hitBody = Phaser.Actions.GetFirst( this.body.getChildren(), { x: this.head.x, y: this.head.y }, 1 );
-        if ( hitBody ) {
-          console.log( 'dead' );
-          this.alive = false;
-          return false
-        }
-
-        this.moveTime = time + this.speed;
-
-        return true;
-      },
-
-      collideWithFood: function ( food ) {
-        if ( this.head.x === food.x && this.head.y === food.y ) {
-          food.eat();
-          this.grow();
-
-          // Increase snake speed for every 5 pieces of food eaten
-          if ( this.speed > 20 && food.total % 5 === 0 ) {
-            this.speed -= 5;
-          }
-          return true;
-        }
-      },
-
-      grow: function () {
-        const newSegment = this.body.create( this.tail.x, this.tail.y, 'body' );
-        newSegment.setOrigin(0);
-      },
-
-      updateGrid: function ( grid ) {
-        // Remove blocks occupied by body segments from the list of valid positions on the grid
-        this.body.children.each( function ( segment ) {
-          const x = segment.x / BLOCK_SIZE;
-          const y = segment.y / BLOCK_SIZE;
-          console.log( x, grid );
-
-          grid[y][x] = false;
-        } );
-
-        return grid;
+    snake.collideWithFood = function ( head, food ) {
+      if ( head.x === food.x && head.y === food.y ) {
+        food.destroy();
+        generateFood();
+        snake.grow = true;
       }
-    } );
-    // End Snake class
+    }
 
-    // Create Food class
-    const Food = new Phaser.Class( {
-      Extends: Phaser.GameObjects.Image,
-      initialize: function Food ( scene, x, y ) {
-        Phaser.GameObjects.Image.call( this, scene )
+    cursors = game.input.keyboard.createCursorKeys();
 
-        this.setTexture( 'food' );
-        this.setPosition( x * BLOCK_SIZE, y * BLOCK_SIZE );
-        this.setOrigin(0);
-
-        this.total = 0;
-
-        scene.children.add( this );
-      },
-
-      eat: function () {
-        this.total++;
-      }
-    } );
-
-    // Create snake instance
-    snake = new Snake( this, 0, 0 );
-    snake2 = new Snake( this, 8, 8 );
-
-    // Create food instance
-    food = new Food( this, _.random( GRID_WIDTH ), _.random( GRID_HEIGHT ) );
-
-    cursors = this.input.keyboard.createCursorKeys();
-    // console.log( Phaser.Input.Keyboard.KeyCodes );
     wasd = {
-      up: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.W ),
-      down: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.S ),
-      left: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.A ),
-      right: game.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.D )
+      up: game.input.keyboard.addKey( Phaser.Keyboard.W ),
+      down: game.input.keyboard.addKey( Phaser.Keyboard.S ),
+      left: game.input.keyboard.addKey( Phaser.Keyboard.A ),
+      right: game.input.keyboard.addKey( Phaser.Keyboard.D )
     }
   }
 
-  function update ( time ) {
-    if ( !snake.alive ) {
-      return;
-    }
-
+  function update () {
+    // Snake movement
     if ( cursors.left.isDown && snake.direction !== RIGHT ) {
-      snake.direction = LEFT;
+      // console.log( 'left' );
+      snake.newDirection = LEFT;
     }
     if ( cursors.right.isDown && snake.direction !== LEFT ) {
-      snake.direction = RIGHT;
+      // console.log( 'right' );
+      snake.newDirection = RIGHT;
     }
     if ( cursors.up.isDown && snake.direction !== DOWN ) {
-      snake.direction = UP;
+      console.log( 'cursor up' );
+      snake.newDirection = UP;
+      console.log( 'snake.newDirection:', snake.newDirection );
     }
     if ( cursors.down.isDown && snake.direction !== UP ) {
-      snake.direction = DOWN;
-    }
-    // check for collision with food every time snake is updated
-    if ( snake.update( time ) ) {
-      if ( snake.collideWithFood( food ) ) {
-        generateFood();
-      }
-    }
-    if ( !snake2.alive ) {
-      return;
+      // console.log( 'down' );
+      snake.newDirection = DOWN;
     }
 
-    if ( wasd.left.isDown && snake2.direction !== RIGHT ) {
-      snake2.direction = LEFT;
+    if ( wasd.left.isDown && snake.direction !== RIGHT ) {
+      snake.newDirection = LEFT;
     }
-    if ( wasd.right.isDown && snake2.direction !== LEFT ) {
-      snake2.direction = RIGHT;
+    if ( wasd.right.isDown && snake.direction !== LEFT ) {
+      snake.newDirection = RIGHT;
     }
-    if ( wasd.up.isDown && snake2.direction !== DOWN ) {
-      snake2.direction = UP;
+    if ( wasd.up.isDown && snake.direction !== DOWN ) {
+      snake.newDirection = UP;
     }
-    if ( wasd.down.isDown && snake2.direction !== UP ) {
-      snake2.direction = DOWN;
+    if ( wasd.down.isDown && snake.direction !== UP ) {
+      snake.newDirection = DOWN;
     }
-    // check for collision with food every time snake2 is updated
-    if ( snake2.update( time ) ) {
-      if ( snake2.collideWithFood( food ) ) {
-        generateFood();
+
+    snake.updateDelay++;
+
+    if ( snake.updateDelay % 10 === 0 ) {
+      const firstSegment = snake[ snake.length - 1 ];
+      const lastSegment = snake.shift()
+      const oldLastSegmentX = lastSegment.x;
+      const oldLastSegmentY = lastSegment.y;
+
+      if ( snake.newDirection ) {
+        console.log( 'snake.direction:', snake.direction );
+        snake.direction = snake.newDirection;
+        console.log( 'snake.direction:', snake.direction );
+        snake.newDirection = null;
       }
+
+      // console.log( 'snake.direction:', snake.direction );
+      switch ( snake.direction ) {
+        case LEFT:
+        lastSegment.x = firstSegment.x - BLOCK_SIZE;
+        lastSegment.y = firstSegment.y;
+        break;
+        case RIGHT:
+        lastSegment.x = firstSegment.x + BLOCK_SIZE;
+        lastSegment.y = firstSegment.y;
+        break;
+        case UP:
+        console.log( 'going up' );
+        lastSegment.x = firstSegment.x;
+        lastSegment.y = firstSegment.y - BLOCK_SIZE;
+        break;
+        case DOWN:
+        lastSegment.x = firstSegment.x;
+        lastSegment.y = firstSegment.y + BLOCK_SIZE;
+        break;
+      }
+
+      snake.push( lastSegment );
+
+      // Increase snake length
+      if ( snake.grow ) {
+        snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
+        snake.grow = false;
+      }
+
+      snake.collideWithFood( firstSegment, food );
     }
-  }
+    // End snake movement
+
+  } // End update
 
   function generateFood() {
-    // Create a grid that initially assumes all positions are valid for food
-    let testGrid = [];
+    console.log( 'generating food' );
+    const x = _.random( CANVAS_WIDTH / BLOCK_SIZE ) * BLOCK_SIZE;
+    const y = _.random( CANVAS_HEIGHT / BLOCK_SIZE ) * BLOCK_SIZE;
 
-    for ( let y = 0; y <= GRID_HEIGHT; y++ ) {
-      testGrid[y] =[];
+    console.log( x, y );
 
-      for ( let x = 0; x <= GRID_WIDTH; x++ ) {
-        testGrid[y][x] = true;
-      }
-    }
-
-    snake.updateGrid( testGrid );
-
-    // Remove invalid positions
-    let validLocations = [];
-
-    for ( let y = 0; y <= GRID_HEIGHT; y++ ) {
-      for ( let x = 0; x <= GRID_WIDTH; x++ ) {
-        if ( testGrid[y][x] === true ) {
-          validLocations.push( { x, y } );
-        }
-      }
-    }
-
-    if ( validLocations.length > 0 ) {
-      const position = _.sample( validLocations );
-      food.setPosition( position.x * BLOCK_SIZE, position.y * BLOCK_SIZE);
-    }
-
-    // const snakeBody = snake.body.children.entries.map( function ( segment ) {
-    //   return {
-    //     x: segment.x / BLOCK_SIZE,
-    //     y: segment.y / BLOCK_SIZE
-    //   };
-    // } );
-    //
-    // // _.range is exclusive
-    // const grid = _.range( GRID_WIDTH + 1 ).map( (x) => {
-    //   return _.range( GRID_HEIGHT + 1 ).map( (y) => { return { x, y } } );
-    // } );
-    //
-    // console.log( grid );
+    food = game.add.sprite( x, y, 'food' )
   }
-
 } );

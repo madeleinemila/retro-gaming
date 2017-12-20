@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   get '/space' => 'pages#space_shooter'
 
 
+  mount ActionCable.server => '/snake/cable'
+
 end
