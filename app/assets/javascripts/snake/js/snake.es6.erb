@@ -31,14 +31,16 @@ $( ".pages.snake" ).ready( function () {
   }
 
   function create () {
-    game.stage.backgroundColor = '#bfcc00';
+    game.stage.backgroundColor = '#F7DA00';
 
     snake = [];
     for ( let i = 0; i < SNAKE_START_LENGTH; i++ ) {
-      snake[i] = game.add.sprite( 0 + ( i * BLOCK_SIZE ), 0, 'body' );
+      snake[i] = game.add.sprite( ( ( i + 8 ) * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
+      console.log( snake );
     }
     snake.speed = 0;
     snake.grow = false;
+    snake.alive = true;
 
     generateFood();
 
@@ -49,6 +51,17 @@ $( ".pages.snake" ).ready( function () {
         food.destroy();
         generateFood();
         snake.grow = true;
+      }
+    }
+
+    snake.collideWithSelf = function ( head ) {
+      for ( let i = 0; i < snake.length - 1; i++ ) {
+        // console.log( snake, i );
+        // console.log( i, head.x, snake[i].x );
+        if ( head.x === snake[i].x && head.y === snake[i].y ) {
+          snake.alive = false;
+          return;
+        }
       }
     }
 
@@ -63,6 +76,11 @@ $( ".pages.snake" ).ready( function () {
   }
 
   function update () {
+    console.log( snake.alive );
+    if ( !snake.alive ) {
+      return;
+    }
+
     // Snake movement
     if ( cursors.left.isDown && snake.direction !== RIGHT ) {
       // console.log( 'left' );
@@ -140,6 +158,8 @@ $( ".pages.snake" ).ready( function () {
       }
 
       snake.collideWithFood( firstSegment, food );
+
+      snake.collideWithSelf( firstSegment );
     }
     // End snake movement
 
