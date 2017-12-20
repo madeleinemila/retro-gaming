@@ -1,3 +1,6 @@
+
+
+
 $(".pages.space_shooter").ready( function() {
   console.log('space shooter game');
 
@@ -362,9 +365,9 @@ $(".pages.space_shooter").ready( function() {
 
       player.body.acceleration.x = 0;
 
-      if (cursors.left.isDown) {
+      if (cursors.left.isDown || hardwareL) {
         player.body.acceleration.x = -ACCLERATION;
-      } else if (cursors.right.isDown) {
+      } else if (cursors.right.isDown || hardwareR) {
       player.body.acceleration.x = ACCLERATION
       }
 
@@ -380,7 +383,7 @@ $(".pages.space_shooter").ready( function() {
       }
 
       //fire bullets
-      if (player.alive && (fireButton.isDown || game.input.activePointer.isDown)) {
+      if (player.alive && (fireButton.isDown || game.input.activePointer.isDown || hardwareU)) {
         fireBullet();
       }
 
