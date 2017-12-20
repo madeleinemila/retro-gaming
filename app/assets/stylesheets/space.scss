@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Bungee+Inline');
+// font-family: 'Bungee Inline', cursive;
+.home-button > img{
+  height:50px;
+  width:50px;
+}
+
+
+.space-container h1{
+  font-family: 'Bungee Inline', cursive;
+  color: #4361b2;
+  text-align: center;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  font-size: 60px;
+}
+
+.space_shooter{
+  background-image: image-url("hook.jpg");
+  background-size:cover;
+}
+
+.space-container + canvas{
+  margin: 0 auto;
+  max-width: 640px;
+  border: 30px solid #4361b2;
+  box-shadow: 0 0 10px black;
+  border-top-right-radius: 4em;
+}

@@ -6,4 +6,7 @@ class PagesController < ApplicationController
   def snake
   end
 
+  def space_shooter
+  end
+
 end
