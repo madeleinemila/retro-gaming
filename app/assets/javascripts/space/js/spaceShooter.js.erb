@@ -40,7 +40,7 @@ console.log('space shooter game');
   var MAXSPEED = 400;
 
   function preload() {
-    game.load.image('starfield', 'assets/starfield.png');
+    game.load.image('starfield', "<%=  asset_path('space/assets/starfield.png')%>");
     game.load.image('ship', 'assets/player.png');
     game.load.image('bullet', 'assets/bullet.png');
     game.load.image('enemy-green', 'assets/enemy-green.png');
