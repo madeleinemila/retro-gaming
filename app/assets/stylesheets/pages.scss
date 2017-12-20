@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:700'); //pong
 // font-family: 'Orbitron', sans-serif;
 
-@import url('https://fonts.googleapis.com/css?family=Bungee+Inline');
+@import url('https://fonts.googleapis.com/css?family=Bungee+Inline'); //space
 // font-family: 'Bungee Inline', cursive;
 
-@import url('https://fonts.googleapis.com/css?family=Audiowide');
+@import url('https://fonts.googleapis.com/css?family=Audiowide'); //snaak
 // font-family: 'Audiowide', cursive
 
 
@@ -47,7 +47,7 @@ body{
   text-transform: uppercase;
 }
 
-h1{
+.container h1{
   font-family:'Bungee Inline', cursive;
   text-transform: uppercase;
   text-align: center;
@@ -60,7 +60,7 @@ h1{
   grid-template-rows: repeat(5, 100px);
 }
 
-.snake {
+.snake-home {
   grid-column: 3/11;
   grid-row: 3/5;
   background: linear-gradient(to bottom right, #404040, white);
@@ -80,7 +80,7 @@ h1{
   box-shadow: 0 0 10px black;
   border-top-left-radius: 4em;
 }
-.pong{
+.pong-home{
   grid-column: 16/24;
   grid-row: 3/5;
   background: linear-gradient(to bottom right, #404040, white);
@@ -96,7 +96,7 @@ h1{
   box-shadow: 0 0 10px black;
 }
 
-.space{
+.space-home{
   grid-column: 30/38;
   grid-row: 3/5;
   background: linear-gradient(to bottom right, #404040, white);
