@@ -1,15 +1,27 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:700'); //pong
 // font-family: 'Orbitron', sans-serif;
 
-.pong.body{
-  max-width: 700;
-}
-
 .pong-container{
   color:#fff337;
 }
 
+
 .pong-container + canvas{
   margin: 0 auto;
   max-width: 640px;
+  border: 30px solid #fff337;
+}
+
+.pong{
+  background-image: image-url("hook.jpg");
+  background-size: cover;
+}
+
+.pong-container h1{
+  font-family: 'Orbitron', sans-serif;
+  color: #fff337;
+  text-align: center;
+  padding-bottom: 10px;
+  padding-top: 30px;
+  font-size: 60px;
 }
