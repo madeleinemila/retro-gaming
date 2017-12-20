@@ -1,10 +1,20 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:700');
+@import url('https://fonts.googleapis.com/css?family=Orbitron:700'); //pong
+// font-family: 'Orbitron', sans-serif;
+
+@import url('https://fonts.googleapis.com/css?family=Bungee+Inline');
+// font-family: 'Bungee Inline', cursive;
+
+@import url('https://fonts.googleapis.com/css?family=Audiowide');
+// font-family: 'Audiowide', cursive
+
+
 
 @mixin screen{
   border: 3px solid black;
   border-radius: 1em;
   z-index:1;
   box-shadow: 0 0 10px black;
+  font-size: 25px;
   text-align: center;
 }
 
@@ -38,7 +48,7 @@ body{
 }
 
 h1{
-  font-family: 'Open Sans', sans-serif;
+  font-family:'Bungee Inline', cursive;
   text-transform: uppercase;
   text-align: center;
   margin-top: 50px;
@@ -53,10 +63,11 @@ h1{
 .snake {
   grid-column: 3/11;
   grid-row: 3/5;
-
   background: linear-gradient(to bottom right, #404040, white);
   transform-origin: top left;
   transform: skew(-3deg,0deg);
+  font-family: 'Audiowide', cursive;
+  font-size: 21px;
   @include screen;
 }
 
@@ -73,6 +84,8 @@ h1{
   grid-column: 16/24;
   grid-row: 3/5;
   background: linear-gradient(to bottom right, #404040, white);
+  font-family: 'Orbitron', sans-serif;
+  padding:10px;
   @include screen;
 }
 
@@ -89,6 +102,7 @@ h1{
   background: linear-gradient(to bottom right, #404040, white);
   transform-origin: top right;
   transform: skew(3deg,0deg);
+  font-family: 'Bungee Inline', cursive;
   @include screen;
 }
 
@@ -136,8 +150,16 @@ h1{
 }
 
 
-// .ship{
-//   grid-column: 23/32;
-//   grid-row: 1/4;
-//   background-image: url("0001.png");
-// }
+.ship{
+  grid-column: 19/32;
+  grid-row: 1/4;
+  background-image: url("0001.png");
+}
+
+a{
+  text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
