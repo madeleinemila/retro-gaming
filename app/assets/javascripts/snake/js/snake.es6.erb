@@ -3,6 +3,7 @@ $( ".pages.snake" ).ready( function () {
 
   // Globals
   let snake;
+  let snake2;
   let food;
   let cursors;
   let wasd;
@@ -37,31 +38,13 @@ $( ".pages.snake" ).ready( function () {
     snake.grow = false;
     snake.alive = true;
 
+    snake2 = [];
+    snake2[0] = game.add.sprite( ( GRID_WIDTH - 8 ) * BLOCK_SIZE , ( GRID_HEIGHT - 8 ) * BLOCK_SIZE , 'body' );
+    snake2.speed = 0;
+    snake2.grow = false;
+    snake2.alive = true;
+
     snake.updateDelay = 0;
-
-    snake.collideWithFood = function ( head, food ) {
-      if ( head.x === food.x && head.y === food.y ) {
-        food.destroy();
-        generateFood();
-        snake.grow = true;
-      }
-    }
-
-    snake.collideWithSelf = function ( head ) {
-      for ( let i = 0; i < snake.length - 1; i++ ) {
-        if ( head.x === snake[i].x && head.y === snake[i].y ) {
-          snake.alive = false;
-          return;
-        }
-      }
-    }
-
-    snake.collideWithWall = function ( head ) {
-      if ( head.x >= CANVAS_WIDTH || head.x < 0 || head.y >= CANVAS_HEIGHT || head.y < 0 ) {
-        snake.alive = false;
-        return;
-      }
-    }
 
     generateFood();
 
@@ -76,7 +59,7 @@ $( ".pages.snake" ).ready( function () {
   }
 
   function update () {
-    if ( !snake.alive ) {
+    if ( !snake.alive || !snake2.alive ) {
       return;
     }
 
@@ -91,19 +74,6 @@ $( ".pages.snake" ).ready( function () {
       snake.newDirection = UP;
     }
     if ( cursors.down.isDown && snake.direction !== UP ) {
-      snake.newDirection = DOWN;
-    }
-
-    if ( wasd.left.isDown && snake.direction !== RIGHT ) {
-      snake.newDirection = LEFT;
-    }
-    if ( wasd.right.isDown && snake.direction !== LEFT ) {
-      snake.newDirection = RIGHT;
-    }
-    if ( wasd.up.isDown && snake.direction !== DOWN ) {
-      snake.newDirection = UP;
-    }
-    if ( wasd.down.isDown && snake.direction !== UP ) {
       snake.newDirection = DOWN;
     }
 
@@ -152,15 +122,81 @@ $( ".pages.snake" ).ready( function () {
         }
       }
 
-      snake.collideWithFood( firstSegment, food );
+      collideWithFood( snake, firstSegment, food );
 
-      snake.collideWithSelf( firstSegment );
+      collideWithSelf( snake, firstSegment );
 
-      snake.collideWithWall( firstSegment );
+      collideWithWall( snake, firstSegment );
 
     }
     // End snake movement
 
+    // Snake2 movement
+    if ( wasd.left.isDown && snake2.direction !== RIGHT ) {
+      snake2.newDirection = LEFT;
+    }
+    if ( wasd.right.isDown && snake2.direction !== LEFT ) {
+      snake2.newDirection = RIGHT;
+    }
+    if ( wasd.up.isDown && snake2.direction !== DOWN ) {
+      snake2.newDirection = UP;
+    }
+    if ( wasd.down.isDown && snake2.direction !== UP ) {
+      snake2.newDirection = DOWN;
+    }
+
+    if ( snake.updateDelay % ( 10 - snake2.speed ) === 0 ) {
+      let firstSegment2 = snake2[ snake2.length - 1 ];
+      const lastSegment2 = snake2.shift();
+      const oldLastSegmentX2 = lastSegment2.x;
+      const oldLastSegmentY2 = lastSegment2.y;
+
+      if ( snake2.newDirection ) {
+        snake2.direction = snake2.newDirection;
+        snake2.newDirection = null;
+      }
+
+      switch ( snake2.direction ) {
+        case LEFT:
+          lastSegment2.x = firstSegment2.x - BLOCK_SIZE;
+          lastSegment2.y = firstSegment2.y;
+          break;
+        case RIGHT:
+          lastSegment2.x = firstSegment2.x + BLOCK_SIZE;
+          lastSegment2.y = firstSegment2.y;
+          break;
+        case UP:
+        // console.log( 'going up' );
+          lastSegment2.x = firstSegment2.x;
+          lastSegment2.y = firstSegment2.y - BLOCK_SIZE;
+          break;
+        case DOWN:
+          lastSegment2.x = firstSegment2.x;
+          lastSegment2.y = firstSegment2.y + BLOCK_SIZE;
+          break;
+      }
+
+      snake2.push( lastSegment2 );
+      firstSegment2 = lastSegment2;
+
+      // Increase snake2 length
+      if ( snake2.grow ) {
+        snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
+        snake2.grow = false;
+
+        if ( snake2.length % 3 === 0 ) {
+          snake2.speed++
+        }
+      }
+
+      collideWithFood( snake2, firstSegment2, food );
+
+      collideWithSelf( snake2, firstSegment2 );
+
+      collideWithWall( snake2, firstSegment2 );
+
+    }
+    // End snake2 movement
   } // End update
 
   function generateFood() {
@@ -169,4 +205,29 @@ $( ".pages.snake" ).ready( function () {
 
     food = game.add.sprite( x, y, 'food' )
   }
+
+  function collideWithFood ( player, head, food ) {
+    if ( head.x === food.x && head.y === food.y ) {
+      food.destroy();
+      generateFood();
+      player.grow = true;
+    }
+  }
+
+  function collideWithSelf ( player, head ) {
+    for ( let i = 0; i < snake.length - 1; i++ ) {
+      if ( head.x === snake[i].x && head.y === snake[i].y ) {
+        player.alive = false;
+        return;
+      }
+    }
+  }
+
+  function collideWithWall ( player, head ) {
+    if ( head.x >= CANVAS_WIDTH || head.x < 0 || head.y >= CANVAS_HEIGHT || head.y < 0 ) {
+      player.alive = false;
+      return;
+    }
+  }
+
 } );
