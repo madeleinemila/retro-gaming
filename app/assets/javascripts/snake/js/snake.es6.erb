@@ -34,15 +34,14 @@ $( ".pages.snake" ).ready( function () {
     game.stage.backgroundColor = '#F7DA00';
 
     snake = [];
-    for ( let i = 0; i < SNAKE_START_LENGTH; i++ ) {
-      snake[i] = game.add.sprite( ( ( i + 8 ) * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
-      console.log( snake );
-    }
+    snake[0] = game.add.sprite( ( 8 * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
+    // for ( let i = 0; i < SNAKE_START_LENGTH; i++ ) {
+    //   snake[i] = game.add.sprite( ( ( i + 8 ) * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
+    // }
     snake.speed = 0;
     snake.grow = false;
     snake.alive = true;
 
-    generateFood();
 
     snake.updateDelay = 0;
 
@@ -56,14 +55,21 @@ $( ".pages.snake" ).ready( function () {
 
     snake.collideWithSelf = function ( head ) {
       for ( let i = 0; i < snake.length - 1; i++ ) {
-        // console.log( snake, i );
-        // console.log( i, head.x, snake[i].x );
         if ( head.x === snake[i].x && head.y === snake[i].y ) {
           snake.alive = false;
           return;
         }
       }
     }
+
+    snake.collideWithWall = function ( head ) {
+      if ( head.x >= CANVAS_WIDTH || head.x < 0 || head.y >= CANVAS_HEIGHT || head.y < 0 ) {
+        snake.alive = false;
+        return;
+      }
+    }
+
+    generateFood();
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -76,27 +82,21 @@ $( ".pages.snake" ).ready( function () {
   }
 
   function update () {
-    console.log( snake.alive );
     if ( !snake.alive ) {
       return;
     }
 
     // Snake movement
     if ( cursors.left.isDown && snake.direction !== RIGHT ) {
-      // console.log( 'left' );
       snake.newDirection = LEFT;
     }
     if ( cursors.right.isDown && snake.direction !== LEFT ) {
-      // console.log( 'right' );
       snake.newDirection = RIGHT;
     }
     if ( cursors.up.isDown && snake.direction !== DOWN ) {
-      console.log( 'cursor up' );
       snake.newDirection = UP;
-      console.log( 'snake.newDirection:', snake.newDirection );
     }
     if ( cursors.down.isDown && snake.direction !== UP ) {
-      // console.log( 'down' );
       snake.newDirection = DOWN;
     }
 
@@ -114,21 +114,17 @@ $( ".pages.snake" ).ready( function () {
     }
 
     snake.updateDelay++;
-
-    if ( snake.updateDelay % 10 === 0 ) {
-      const firstSegment = snake[ snake.length - 1 ];
-      const lastSegment = snake.shift()
+    if ( snake.updateDelay % ( 10 - snake.speed ) === 0 ) {
+      let firstSegment = snake[ snake.length - 1 ];
+      const lastSegment = snake.shift();
       const oldLastSegmentX = lastSegment.x;
       const oldLastSegmentY = lastSegment.y;
 
       if ( snake.newDirection ) {
-        console.log( 'snake.direction:', snake.direction );
         snake.direction = snake.newDirection;
-        console.log( 'snake.direction:', snake.direction );
         snake.newDirection = null;
       }
 
-      // console.log( 'snake.direction:', snake.direction );
       switch ( snake.direction ) {
         case LEFT:
         lastSegment.x = firstSegment.x - BLOCK_SIZE;
@@ -139,7 +135,7 @@ $( ".pages.snake" ).ready( function () {
         lastSegment.y = firstSegment.y;
         break;
         case UP:
-        console.log( 'going up' );
+        // console.log( 'going up' );
         lastSegment.x = firstSegment.x;
         lastSegment.y = firstSegment.y - BLOCK_SIZE;
         break;
@@ -150,27 +146,32 @@ $( ".pages.snake" ).ready( function () {
       }
 
       snake.push( lastSegment );
+      firstSegment = lastSegment;
 
       // Increase snake length
       if ( snake.grow ) {
         snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
         snake.grow = false;
+
+        if ( snake.length % 3 === 0 ) {
+          snake.speed++
+        }
       }
 
       snake.collideWithFood( firstSegment, food );
 
       snake.collideWithSelf( firstSegment );
+
+      snake.collideWithWall( firstSegment );
+
     }
     // End snake movement
 
   } // End update
 
   function generateFood() {
-    console.log( 'generating food' );
-    const x = _.random( CANVAS_WIDTH / BLOCK_SIZE ) * BLOCK_SIZE;
-    const y = _.random( CANVAS_HEIGHT / BLOCK_SIZE ) * BLOCK_SIZE;
-
-    console.log( x, y );
+    const x = _.random( GRID_WIDTH ) * BLOCK_SIZE;
+    const y = _.random( GRID_HEIGHT ) * BLOCK_SIZE;
 
     food = game.add.sprite( x, y, 'food' )
   }
