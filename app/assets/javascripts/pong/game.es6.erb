@@ -7,50 +7,50 @@ let hardwareR = false;
 let hardwareU = false;
 let hardwareD = false;
 
+$.ajax('http://localhost:3001').done( function() {
+    const socket = io.connect('http://localhost:3001');
 
-const socket = io.connect('http://localhost:3001');
+    // fyi hardware is outputting:
+    // LEFT 48 off, 49 on
+    // UP 50 off, 51 on
+    // RIGHT 52 off, 53 on
+    // DOWN 54 off, 55 on
 
-// fyi hardware is outputting:
-// LEFT 48 off, 49 on
-// UP 50 off, 51 on
-// RIGHT 52 off, 53 on
-// DOWN 54 off, 55 on
-
-socket.on('pressed', function(data) {
-
-  switch(data.pressed) {
-    case 48:
-      hardwareL = false;
-      break;
-    case 49:
-      hardwareL = true;
-      break;
-    case 50:
-      hardwareU = false;
-      break;
-    case 51:
-      hardwareU = true;
-      break;
-    case 52:
-      hardwareR = false;
-      break;
-    case 53:
-      hardwareR = true;
-    case 54:
-      hardwareD = false;
-      break;
-    case 55:
-      hardwareD = true;
-      break;
-    default:
-      hardwareL = false;
-      hardwareR = false;
-      hardwareU = false;
-      hardwareD = false;
-  }
-
-});
-
+    socket.on('pressed', function(data) {
+      switch(data.pressed) {
+        case 48:
+          hardwareL = false;
+          break;
+        case 49:
+          hardwareL = true;
+          break;
+        case 50:
+          hardwareU = false;
+          break;
+        case 51:
+          hardwareU = true;
+          break;
+        case 52:
+          hardwareR = false;
+          break;
+        case 53:
+          hardwareR = true;
+        case 54:
+          hardwareD = false;
+          break;
+        case 55:
+          hardwareD = true;
+          break;
+        default:
+          hardwareL = false;
+          hardwareR = false;
+          hardwareU = false;
+          hardwareD = false;
+      }
+    });
+  }).fail( function () {
+      console.log('No controller server present');
+  });
 
 
 //*****************************************************************************
@@ -282,7 +282,6 @@ $( ".pages.pong" ).ready( function () {
 
     startBall: function() {
       this.ballVelocity = gameProperties.ballVelocity;
-      console.log(`Inside initPhysics.startBall: ${this.ballVelocity}`);
       this.ballReturnCount = 0;
       this.ballSprite.visible = true;
       // console.log( this.ballSprite );
