@@ -7,6 +7,9 @@ $( document ).ready( function () {
     },
 
     // Called when the subscription has been terminated by the server
+    received: function ( data ) {
+
+    },
 
     // Called when there's incoming data on the websocket for this channel
 
