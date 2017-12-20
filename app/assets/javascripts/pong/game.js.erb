@@ -1,3 +1,61 @@
+// **************** HARDWARE CONTROLLER SOCKET *********************************
+
+
+// INIT PUSHED FLAGS
+let hardwareL = false;
+let hardwareR = false;
+let hardwareU = false;
+let hardwareD = false;
+
+
+const socket = io.connect('http://localhost:3001');
+
+// fyi hardware is outputting:
+// LEFT 48 off, 49 on
+// UP 50 off, 51 on
+// RIGHT 52 off, 53 on
+// DOWN 54 off, 55 on
+
+socket.on('pressed', function(data) {
+  console.log(data.pressed);
+
+  switch(data.pressed) {
+    case 48:
+      hardwareL = false;
+      break;
+    case 49:
+      hardwareL = true;
+      break;
+    case 50:
+      hardwareU = false;
+      break;
+    case 51:
+      hardwareU = true;
+      break;
+    case 52:
+      hardwareR = false;
+      break;
+    case 53:
+      hardwareR = true;
+    case 54:
+      hardwareD = false;
+      break;
+    case 55:
+      hardwareD = true;
+      break;
+    default:
+      hardwareL = false;
+      hardwareR = false;
+      hardwareU = false;
+      hardwareD = false;
+  }
+
+});
+
+
+
+//*****************************************************************************
+
 $( ".pages.pong" ).ready( function () {
 
   var gameProperties = {
@@ -240,11 +298,12 @@ $( ".pages.pong" ).ready( function () {
       game.physics.arcade.checkCollision.right = enabled;
     },
     moveLeftPaddle: function () {
-      if (this.paddleLeft_up.isDown)
+      if (this.paddleLeft_up.isDown || hardwareU )
       {
         this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
+        test = 0;
       }
-      else if (this.paddleLeft_down.isDown)
+      else if (this.paddleLeft_down.isDown || hardwareD )
       {
         this.paddleLeftSprite.body.velocity.y = gameProperties.paddleVelocity;
       } else {
