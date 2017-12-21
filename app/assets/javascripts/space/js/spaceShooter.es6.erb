@@ -10,17 +10,21 @@ $(".pages.space_shooter").ready( function() {
     var greenEnemies;
     var blueEnemies;
     var enemyBullets;
+    var enemyBullet;
+    var blueEnemyBullets;
+    var ray;
     var starfield;
     var cursors;
     var bank;
     var shipTrail;
+    var booster;
     var explosions;
     var playerDeath;
     var bullets;
     var fireButton;
     var bulletTimer = 0;
     var shields;
-    var score = 0;
+    var score = 14000;
     var scoreText;
 
     var greenEnemyLaunchTimer;
@@ -29,11 +33,13 @@ $(".pages.space_shooter").ready( function() {
     var blueEnemyLaunched = false;
 
     var blueEnemySpacing = 2500;
+    var boss;
     var bossLaunchTimer;
     var bossLaunched = false;
     var bossSpacing = 20000;
     var bossBulletTimer = 0;
     var bossYdirection = -1;
+    var bossDeath;
 
     var gameOver;
 
