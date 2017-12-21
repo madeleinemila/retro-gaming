@@ -4,6 +4,12 @@ class PagesController < ApplicationController
   end
 
   def snake
+    @snaak_score = Score.first.snaak
+  end
+
+  def snake_update
+    snake_score = Score.first
+    snake_score.update :snaak => params[:score]
   end
 
   def space_shooter
