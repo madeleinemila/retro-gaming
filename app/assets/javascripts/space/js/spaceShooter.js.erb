@@ -42,6 +42,9 @@ $(".pages.space_shooter").ready( function() {
     var DRAG = 400;
     var MAXSPEED = 400;
 
+    const highScore = <%= Score.first.roids %>
+
+
     function preload() {
       game.load.image('starfield', "<%=  asset_path('space/assets/starfield.png')%>");
       game.load.image('ship', "<%= asset_path('space/assets/player.png')%>");
@@ -410,6 +413,15 @@ $(".pages.space_shooter").ready( function() {
 
       //gameover?
           if (! player.alive && gameOver.visible === false) {
+
+           if ( score > highScore ) {
+             // POST request...
+             $.post(`http://localhost:3000/space/${ score }`).done((res) => {
+               console.log(res);
+             });
+           }
+
+
            gameOver.visible = true;
            gameOver.alpha = 0;
            var fadeInGameOver = game.add.tween(gameOver);

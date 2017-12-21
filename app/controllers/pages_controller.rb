@@ -7,7 +7,13 @@ class PagesController < ApplicationController
   end
 
   def space_shooter
-    @score = Score.first.roids
+    @high_score = Score.first.roids
   end
+
+  def space_shooter_update
+    high_score = Score.first
+    high_score.update :roids => params[:score]
+  end
+
 
 end
