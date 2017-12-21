@@ -1,16 +1,16 @@
 <div class="snake-container">
-
-  <h1>Snaak</h1>
-
   <nav>
       <%= link_to image_tag("rocket.png"), home_path, :class => "home-button"%>
   </nav>
+
+  <h1>Snaak</h1>
 
   <div id="status"></div>
   <div id="snake"></div>
 
   <div class="high-scores">
-    <h1>Best Score: <%= @snaak_score %></h1>
+    <div><h1>Best Score: </h1></div>
+    <div><h1 class="score-text" id="snake-score"><%= @snaak_score %></h1></div>
   </div>
 
 </div>

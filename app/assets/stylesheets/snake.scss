@@ -5,12 +5,12 @@
 //   width:50px;
 // }
 
-.snake{
+.snake {
   background-image: image-url("hook.jpg");
   background-size: cover;
 }
 
-.snake-container h1{
+.snake-container h1 {
   position: relative;
   color: #1ccc1a;
   font-family: 'Audiowide', cursive;
@@ -20,7 +20,7 @@
   font-size: 60px;
 }
 
-#snake > canvas{
+#snake > canvas {
   margin: 0 auto;
   max-width: 640px;
   border: 30px solid #1ccc1a;

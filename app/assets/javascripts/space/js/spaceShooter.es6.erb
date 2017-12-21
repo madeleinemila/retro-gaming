@@ -433,7 +433,7 @@ $(".pages.space_shooter").ready( function() {
              // POST request...
              // $.post(`http://localhost:3000/space/${ score }`).done((res) => {
              $.post(`https://gehms.herokuapp.com/space/${ score }`).done((res) => {
-               console.log(res);
+               $('#space-score').text( score );
              });
            }
 
