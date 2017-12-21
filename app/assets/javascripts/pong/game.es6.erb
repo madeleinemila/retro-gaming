@@ -7,51 +7,92 @@ let hardwareR = false;
 let hardwareU = false;
 let hardwareD = false;
 
+let hardwareL2 = false;
+let hardwareR2 = false;
+let hardwareU2 = false;
+let hardwareD2 = false;
 
-const socket = io.connect('http://localhost:3001');
+// $.ajax('http://localhost:3001').done( function() {
+    const socket = io.connect('http://localhost:3001');
 
-// fyi hardware is outputting:
-// LEFT 48 off, 49 on
-// UP 50 off, 51 on
-// RIGHT 52 off, 53 on
-// DOWN 54 off, 55 on
+    // fyi hardware is outputting:
+    // LEFT 48 off, 49 on
+    // UP 50 off, 51 on
+    // RIGHT 52 off, 53 on
+    // DOWN 54 off, 55 on
 
-socket.on('pressed', function(data) {
-  console.log(data.pressed);
+    socket.on('pressed', function(data) {
+      switch(data.pressed) {
+        // PLAYER 1 - LHS USB PORT
+        case 48:
+          hardwareL = false;
+          break;
+        case 49:
+          hardwareL = true;
+          break;
+        case 50:
+          hardwareU = false;
+          break;
+        case 51:
+          hardwareU = true;
+          break;
+        case 52:
+          hardwareR = false;
+          break;
+        case 53:
+          hardwareR = true;
+        case 54:
+          hardwareD = false;
+          break;
+        case 55:
+          hardwareD = true;
+          break;
+        default:
+          hardwareL = false;
+          hardwareR = false;
+          hardwareU = false;
+          hardwareD = false;
+        }
+    });
 
-  switch(data.pressed) {
-    case 48:
-      hardwareL = false;
-      break;
-    case 49:
-      hardwareL = true;
-      break;
-    case 50:
-      hardwareU = false;
-      break;
-    case 51:
-      hardwareU = true;
-      break;
-    case 52:
-      hardwareR = false;
-      break;
-    case 53:
-      hardwareR = true;
-    case 54:
-      hardwareD = false;
-      break;
-    case 55:
-      hardwareD = true;
-      break;
-    default:
-      hardwareL = false;
-      hardwareR = false;
-      hardwareU = false;
-      hardwareD = false;
-  }
+    socket.on('pressed1421', function(data) {
+        switch(data.pressed1421) {
+        // PLAYER 2
+        case 58:
+          hardwareL2 = false;
+          break;
+        case 59:
+          hardwareL2 = true;
+          break;
+        case 60:
+          hardwareU2 = false;
+          break;
+        case 61:
+          hardwareU2 = true;
+          console.log("up player 2");
+          break;
+        case 62:
+          hardwareR2 = false;
+          break;
+        case 63:
+          hardwareR2 = true;
+        case 64:
+          hardwareD2 = false;
+          break;
+        case 65:
+          hardwareD2 = true;
+          break;
+        default:
+          hardwareL2 = false;
+          hardwareR2 = false;
+          hardwareU2 = false;
+          hardwareD2 = false;
+        }
+      });
 
-});
-
+  // }).fail( function () {
+  //     console.log('No controller server present');
+  // });
 
 
 //*****************************************************************************
@@ -69,10 +110,9 @@ $( ".pages.pong" ).ready( function () {
     paddleSegmentsMax: 4,
     paddleSegmentHeight: 4,
     paddleSegmentAngle: 15,
-    paddleTopGap: 22,
+    paddleTopGap: 20,
 
-    ballVelocity: 500,
-    ballStartDelay: 2,
+    ballVelocity: 200, // CHANGED
     ballVelocityIncrement: 25,
     ballReturnCount: 4,
     ballRandomStartingAngleLeft: [-120, 120],
@@ -151,7 +191,13 @@ $( ".pages.pong" ).ready( function () {
     this.ballVelocity;
   };
 
+
+//  ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~   ~~~~~~~~~~~~
+
   mainState.prototype = {
+
+    //*************************************************************************
+
     preload: function () {
       game.load.image(graphicAssets.ballName, graphicAssets.ballURL);
       game.load.image(graphicAssets.paddleName, graphicAssets.paddleURL);
@@ -161,6 +207,8 @@ $( ".pages.pong" ).ready( function () {
       game.load.audio('ballMissed', '<%= asset_path('pong/ballMissed.ogg') %>');
     },
 
+    //*************************************************************************
+
     create: function () {
       this.initGraphics();
       this.initPhysics();
@@ -168,6 +216,8 @@ $( ".pages.pong" ).ready( function () {
       this.initSounds();
       this.startDemo();
     },
+
+    //*************************************************************************
 
     update: function () {
       this.moveLeftPaddle();
@@ -178,6 +228,8 @@ $( ".pages.pong" ).ready( function () {
         this.sndBallBounce.play();
       }
     },
+
+    //*************************************************************************
 
     initGraphics: function () {
       this.backgroundGraphics = game.add.graphics(0, 0);
@@ -217,7 +269,7 @@ $( ".pages.pong" ).ready( function () {
 
     initPhysics: function() {
       game.physics.startSystem(Phaser.Physics.ARCADE);
-      game.physics.enable(this.ballSprite);
+      game.physics.enable(this.ballSprite, Phaser.Physics.ARCADE); // CHANGED
 
       this.ballSprite.checkWorldBounds = true;
       this.ballSprite.body.collideWorldBounds = true;
@@ -270,18 +322,28 @@ $( ".pages.pong" ).ready( function () {
       this.hideTextFields();
     },
 
+    startBall: function() {
+      this.ballVelocity = gameProperties.ballVelocity;
+      this.ballReturnCount = 0;
+      this.ballSprite.visible = true;
+      // console.log( this.ballSprite );
+      var randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight.concat(gameProperties.ballRandomStartingAngleLeft));
+
+      if (this.missedSide == 'right') {
+        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight);
+      } else if (this.missedSide == 'left') {
+        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleLeft);
+      }
+      game.physics.arcade.velocityFromAngle(randomAngle, gameProperties.ballVelocity, this.ballSprite.body.velocity);
+    },
+
     resetBall: function(){
       this.ballSprite.reset(game.world.centerX, game.rnd.between(0, gameProperties.screenHeight));
       this.ballSprite.visible = false;
       game.time.events.add(Phaser.Timer.SECOND * gameProperties.ballStartDelay, this.startBall, this);
     },
 
-    startBall: function() {
-      this.ballVelocity = gameProperties.ballVelocity;
-      this.ballReturnCount = 0;
-    },
-
-    enablePaddles: function (enabled){
+    enablePaddles: function (enabled){  // uptohere
       this.paddleGroup.setAll('visible', enabled);
       this.paddleGroup.setAll('body.enable', enabled);
 
@@ -301,7 +363,6 @@ $( ".pages.pong" ).ready( function () {
       if (this.paddleLeft_up.isDown || hardwareU )
       {
         this.paddleLeftSprite.body.velocity.y = -gameProperties.paddleVelocity;
-        
       }
       else if (this.paddleLeft_down.isDown || hardwareD )
       {
@@ -316,11 +377,11 @@ $( ".pages.pong" ).ready( function () {
     },
 
     moveRightPaddle: function () {
-      if (this.paddleRight_up.isDown)
+      if (this.paddleRight_up.isDown || hardwareU2)
       {
         this.paddleRightSprite.body.velocity.y = -gameProperties.paddleVelocity;
       }
-      else if (this.paddleRight_down.isDown)
+      else if (this.paddleRight_down.isDown || hardwareD2 )
       {
         this.paddleRightSprite.body.velocity.y = gameProperties.paddleVelocity;
       } else {
@@ -403,24 +464,14 @@ $( ".pages.pong" ).ready( function () {
     },
 
 
-    startBall: function() {
-      this.ballSprite.visible = true;
-      console.log( this.ballSprite );
-      var randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight.concat(gameProperties.ballRandomStartingAngleLeft));
 
-      if (this.missedSide == 'right') {
-        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleRight);
-      } else if (this.missedSide == 'left') {
-        randomAngle = game.rnd.pick(gameProperties.ballRandomStartingAngleLeft);
-      }
-      game.physics.arcade.velocityFromAngle(randomAngle, gameProperties.ballVelocity, this.ballSprite.body.velocity);
-    },
-
-  };
+  };  // end mainState.prototype
 
   var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeight, Phaser.AUTO, 'gameDiv');
 
   game.state.add('main', mainState);
 
   game.state.start('main');
-} );
+
+
+}); // end page ready

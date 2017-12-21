@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Audiowide');
+// font-family: 'Audiowide', cursive
+.home-button > img{
+  height:50px;
+  width:50px;
+}
+
+
+.snake{
+  background-image: image-url("hook.jpg");
+  background-size: cover;
+}
+
+.snake-container h1{
+  color: #1ccc1a;
+  font-family: 'Audiowide', cursive;
+  text-align: center;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  font-size: 60px;
+}
+
+#snake > canvas{
+  margin: 0 auto;
+  max-width: 640px;
+  border: 30px solid #1ccc1a;
+  box-shadow: 0 0 10px black;
+  border-top-left-radius: 4em;
+}
