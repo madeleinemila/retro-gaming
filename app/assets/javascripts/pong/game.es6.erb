@@ -103,7 +103,7 @@ $( ".pages.pong" ).ready( function () {
     screenWidth: 640,
     screenHeight: 480,
 
-    dashSize:5,
+    dashSize:7,
     paddleLeft_x:50,
     paddleRight_x: 590,
     paddleVelocity: 600,
@@ -155,9 +155,11 @@ $( ".pages.pong" ).ready( function () {
   }
 
   var labels = {
-    clickToStart: 'Left paddle: A to move up, Z to move down.\n\nRight paddle: UP and DOWN arrow keys.\n\n- click to start -',
+    clickToStart:  'Click to start',
     winner: 'Winner!',
   };
+
+
 
 
   var mainState = function(game) {

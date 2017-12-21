@@ -14,7 +14,7 @@
   border-radius: 1em;
   z-index:1;
   box-shadow: 0 0 10px black;
-  font-size: 25px;
+  font-size: 23px;
   text-align: center;
 }
 
@@ -38,7 +38,7 @@
 
 body{
   background-image: image-url("retro-wallpaper-1.jpg");
-  background-size: cover;
+  // background-size: cover;
 }
 
 .container{
@@ -53,10 +53,18 @@ body{
   text-transform: uppercase;
   text-align: center;
   margin-top: 50px;
-  font-size: 50px;
+  font-size: 60px;
+  color: black;
+  animation-name: gehms;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
 }
-
-
+@keyframes gehms {
+    0%   {color: black;}
+    25%  {color: blue;}
+    50%  {color: red;}
+    100% {color: yellow;}
+}
 
 .the-grid{
   display: grid;
@@ -152,12 +160,23 @@ body{
   @include controllerWhite;
 }
 
-
 .ship{
   grid-column: 19/32;
   grid-row: 1/4;
   background-image: image-url("0001.png");
 }
+
+// .monster{
+//   grid-column: 1/22;
+//   grid-row:3/6;
+//   background-image: image-url("monster.png");
+//   z-index: 2;
+//   visibility: visible;
+// }
+
+// .monster:hover{
+// visibility: hidden;
+// }
 
 a{
   text-decoration: none;
