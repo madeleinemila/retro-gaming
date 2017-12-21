@@ -19,13 +19,19 @@
 .space-container h2 {
   @extend h1;
   font-size: 40px;
+  text-align: left;
 }
 
-
+#space-score {
+  text-align: right;
+}
 
 .space_shooter{
+  background-color: rgba(40, 0, 0, 1.00); // fallback
   background-image: image-url("hook.jpg");
-  background-size:cover;
+  background-size: cover;
+  background-position-y: 100px;
+  background-repeat: no-repeat;
 }
 
 #space_shooter > canvas{
