@@ -266,11 +266,8 @@ $(".pages.space_shooter").ready( function() {
           boss.body.acceleration.x = 0;
         }
 
-        //  Squish and rotate boss for illusion of "banking"
-        var bank = boss.body.velocity.x / MAXSPEED;
-        boss.scale.x = 0.1 - Math.abs(bank) / 3;
-        boss.angle = 180 - bank * 20;
 
+        var bank = boss.body.velocity.x / MAXSPEED;
         booster.x = boss.x + -5 * bank;
         booster.y = boss.y + 10 * Math.abs(bank) - boss.height / 2;
 
@@ -384,6 +381,15 @@ $(".pages.space_shooter").ready( function() {
       if (player.x < 50) {
         player.x = 50;
         player.body.acceleration.x = 0;
+      }
+
+      if (boss.x > game.width - 50) {
+        boss.x = game.width - 50;
+        boss.body.acceleration.x = 0;
+      }
+      if (boss.x < 50) {
+        boss.x = 50;
+        boss.body.acceleration.x = 0;
       }
 
       //fire bullets
