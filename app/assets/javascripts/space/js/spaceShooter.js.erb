@@ -4,7 +4,7 @@
 $(".pages.space_shooter").ready( function() {
   console.log('space shooter game');
 
-    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-demo', {preload: preload, create: create, update: update, render: render});
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'space_shooter', {preload: preload, create: create, update: update, render: render});
 
     var player;
     var greenEnemies;
@@ -41,6 +41,9 @@ $(".pages.space_shooter").ready( function() {
     var ACCLERATION = 600;
     var DRAG = 400;
     var MAXSPEED = 400;
+
+    const highScore = <%= Score.first.roids %>
+
 
     function preload() {
       game.load.image('starfield', "<%=  asset_path('space/assets/starfield.png')%>");
@@ -417,6 +420,16 @@ $(".pages.space_shooter").ready( function() {
 
       //gameover?
           if (! player.alive && gameOver.visible === false) {
+
+           if ( score > highScore ) {
+             // POST request...
+             // $.post(`http://localhost:3000/space/${ score }`).done((res) => {
+             $.post(`http://gehms.herokuapp.com/space/${ score }`).done((res) => {
+               console.log(res);
+             });
+           }
+
+
            gameOver.visible = true;
            gameOver.alpha = 0;
            var fadeInGameOver = game.add.tween(gameOver);

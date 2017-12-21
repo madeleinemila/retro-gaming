@@ -20,7 +20,7 @@
   background-size:cover;
 }
 
-.space-container + canvas{
+#space_shooter > canvas{
   margin: 0 auto;
   max-width: 640px;
   border: 30px solid #4361b2;

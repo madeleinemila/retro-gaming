@@ -2,6 +2,9 @@ $( ".pages.snake" ).ready( function () {
   const game = new Phaser.Game( 640, 480, Phaser.AUTO, 'snake', { preload: preload, create: create, update:update } );
 
   // Globals
+
+  const highScore = <%= Score.first.snaak %>
+
   let snake;
   let snake2;
   let food;
@@ -114,6 +117,11 @@ $( ".pages.snake" ).ready( function () {
         if ( snake.grow ) {
           snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
           snake.grow = false;
+          if ( snake.length > highScore ) {
+             $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
+               console.log('Player 1' + res);
+             });
+          }
 
           if ( snake.length % 3 === 0 ) {
             snake.speed++
@@ -186,6 +194,12 @@ $( ".pages.snake" ).ready( function () {
         if ( snake2.grow ) {
           snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
           snake2.grow = false;
+          if ( snake.length > highScore ) {
+             // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
+             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
+               console.log('Player 2' + res);
+             });
+          }
 
           if ( snake2.length % 3 === 0 ) {
             snake2.speed++
