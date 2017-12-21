@@ -424,7 +424,7 @@ $(".pages.space_shooter").ready( function() {
           if ( score > highScore ) {
              // POST request...
              // $.post(`http://localhost:3000/space/${ score }`).done((res) => {
-             $.post(`http://gehms.herokuapp.com/space/${ score }`).done((res) => {
+             $.post(`https://gehms.herokuapp.com/space/${ score }`).done((res) => {
                console.log(res);
              });
            }
