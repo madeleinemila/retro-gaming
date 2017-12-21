@@ -3,7 +3,7 @@ $( ".pages.snake" ).ready( function () {
 
   // Globals
 
-  // const highScore = <%# Score.first.snaak %> // CHANGED
+  const highScore = <%= Score.first.snaak %>
 
   let snake;
   let snake2;
@@ -117,12 +117,12 @@ $( ".pages.snake" ).ready( function () {
         if ( snake.grow ) {
           snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
           snake.grow = false;
-          // if ( snake.length > highScore ) { // CHANGED
-          //    $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
-          //    $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-          //      console.log('Player 1' + res);
-          //    });
-          // }
+          if ( snake.length > highScore ) {
+             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
+             // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
+               console.log('Player 1' + res);
+             });
+          }
 
           if ( snake.length % 3 === 0 ) {
             snake.speed++
@@ -195,12 +195,12 @@ $( ".pages.snake" ).ready( function () {
         if ( snake2.grow ) {
           snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
           snake2.grow = false;
-          // if ( snake.length > highScore ) { // CHANGED
-          //    // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-          //    $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
-          //      console.log('Player 2' + res);
-          //    });
-          // }
+          if ( snake.length > highScore ) {
+             // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
+             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
+               console.log('Player 2' + res);
+             });
+          }
 
           if ( snake2.length % 3 === 0 ) {
             snake2.speed++

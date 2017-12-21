@@ -42,7 +42,7 @@ $(".pages.space_shooter").ready( function() {
     var DRAG = 400;
     var MAXSPEED = 400;
 
-    // const highScore = <%# Score.first.roids %> // CHANGED
+    const highScore = <%= Score.first.roids %>
 
 
     function preload() {
@@ -421,7 +421,13 @@ $(".pages.space_shooter").ready( function() {
       //gameover?
           if (! player.alive && gameOver.visible === false) {
 
-           // PUT THE THING HERE CHANGED
+          if ( score > highScore ) {
+             // POST request...
+             // $.post(`http://localhost:3000/space/${ score }`).done((res) => {
+             $.post(`http://gehms.herokuapp.com/space/${ score }`).done((res) => {
+               console.log(res);
+             });
+           }
 
 
            gameOver.visible = true;
