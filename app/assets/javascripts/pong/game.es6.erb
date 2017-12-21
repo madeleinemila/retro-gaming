@@ -7,7 +7,12 @@ let hardwareR = false;
 let hardwareU = false;
 let hardwareD = false;
 
-$.ajax('http://localhost:3001').done( function() {
+let hardwareL2 = false;
+let hardwareR2 = false;
+let hardwareU2 = false;
+let hardwareD2 = false;
+
+// $.ajax('http://localhost:3001').done( function() {
     const socket = io.connect('http://localhost:3001');
 
     // fyi hardware is outputting:
@@ -18,6 +23,7 @@ $.ajax('http://localhost:3001').done( function() {
 
     socket.on('pressed', function(data) {
       switch(data.pressed) {
+        // PLAYER 1 - LHS USB PORT
         case 48:
           hardwareL = false;
           break;
@@ -46,11 +52,47 @@ $.ajax('http://localhost:3001').done( function() {
           hardwareR = false;
           hardwareU = false;
           hardwareD = false;
-      }
+        }
     });
-  }).fail( function () {
-      console.log('No controller server present');
-  });
+
+    socket.on('pressed1421', function(data) {
+        switch(data.pressed1421) {
+        // PLAYER 2
+        case 58:
+          hardwareL2 = false;
+          break;
+        case 59:
+          hardwareL2 = true;
+          break;
+        case 60:
+          hardwareU2 = false;
+          break;
+        case 61:
+          hardwareU2 = true;
+          console.log("up player 2");
+          break;
+        case 62:
+          hardwareR2 = false;
+          break;
+        case 63:
+          hardwareR2 = true;
+        case 64:
+          hardwareD2 = false;
+          break;
+        case 65:
+          hardwareD2 = true;
+          break;
+        default:
+          hardwareL2 = false;
+          hardwareR2 = false;
+          hardwareU2 = false;
+          hardwareD2 = false;
+        }
+      });
+
+  // }).fail( function () {
+  //     console.log('No controller server present');
+  // });
 
 
 //*****************************************************************************
@@ -335,11 +377,11 @@ $( ".pages.pong" ).ready( function () {
     },
 
     moveRightPaddle: function () {
-      if (this.paddleRight_up.isDown)
+      if (this.paddleRight_up.isDown || hardwareU2)
       {
         this.paddleRightSprite.body.velocity.y = -gameProperties.paddleVelocity;
       }
-      else if (this.paddleRight_down.isDown)
+      else if (this.paddleRight_down.isDown || hardwareD2 )
       {
         this.paddleRightSprite.body.velocity.y = gameProperties.paddleVelocity;
       } else {

@@ -6,10 +6,10 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+
 //  *****************************************************************
 // get serial data from ARDUINO -> NODE SERVER -> emitted via a socket
 // CLI: node server.js
-
 
 const serialport = new SerialPort("/dev/cu.usbmodem1411");  // maddi's LHS USB port
 serialport.on('open', function(){
