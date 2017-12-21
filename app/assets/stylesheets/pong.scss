@@ -18,6 +18,7 @@
 }
 
 .pong{
+  background-color: rgba(40, 0, 0, 1.00); // fallback
   background-image: image-url("hook.jpg");
   background-size: cover;
 }

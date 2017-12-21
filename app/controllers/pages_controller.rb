@@ -13,7 +13,7 @@ class PagesController < ApplicationController
   end
 
   def space_shooter
-    @high_score = Score.first.roids
+    @roids_score = Score.first.roids
   end
 
   def space_shooter_update
