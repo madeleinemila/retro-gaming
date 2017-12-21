@@ -12,7 +12,7 @@ let hardwareR2 = false;
 let hardwareU2 = false;
 let hardwareD2 = false;
 
-$.ajax('http://localhost:3001').done( function() {
+// $.ajax('http://localhost:3001').done( function() {
     const socket = io.connect('http://localhost:3001');
 
     // fyi hardware is outputting:
@@ -47,7 +47,17 @@ $.ajax('http://localhost:3001').done( function() {
         case 55:
           hardwareD = true;
           break;
+        default:
+          hardwareL = false;
+          hardwareR = false;
+          hardwareU = false;
+          hardwareD = false;
+        }
+    });
 
+    socket.on('pressed1421', function(data) {
+        switch(data.pressed1421) {
+        // PLAYER 2
         case 58:
           hardwareL2 = false;
           break;
@@ -59,6 +69,7 @@ $.ajax('http://localhost:3001').done( function() {
           break;
         case 61:
           hardwareU2 = true;
+          console.log("up player 2");
           break;
         case 62:
           hardwareR2 = false;
@@ -71,21 +82,17 @@ $.ajax('http://localhost:3001').done( function() {
         case 65:
           hardwareD2 = true;
           break;
-
         default:
-          hardwareL = false;
-          hardwareR = false;
-          hardwareU = false;
-          hardwareD = false;
           hardwareL2 = false;
           hardwareR2 = false;
           hardwareU2 = false;
           hardwareD2 = false;
-      }
-    });
-  }).fail( function () {
-      console.log('No controller server present');
-  });
+        }
+      });
+
+  // }).fail( function () {
+  //     console.log('No controller server present');
+  // });
 
 
 //*****************************************************************************
