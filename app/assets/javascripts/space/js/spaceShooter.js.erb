@@ -70,9 +70,10 @@ $(".pages.space_shooter").ready( function() {
       player = game.add.sprite(400, 500, 'ship');
       player.health = 100;
       player.anchor.setTo(0.5, 0.5);
+      player.scale.setTo(0.15, 0.15);
 
       game.physics.enable(player, Phaser.Physics.ARCADE);
-
+      player.body.setSize = (25, 25, 25, 25);
       player.body.maxVelocity.setTo(MAXSPEED, MAXSPEED);
       player.body.drag.setTo(DRAG, DRAG);
       player.weaponLevel = 1;
@@ -99,7 +100,7 @@ $(".pages.space_shooter").ready( function() {
       //handle disposing enemies off screen before reusing, use onKilled event to clean up associated trails
       greenEnemies.forEach(function(enemy) {
         addEnemyEmitterTrail(enemy);
-        enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
+        // enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
         enemy.damageAmount = 20;
         enemy.events.onKilled.add(function() {
           enemy.trail.kill();
@@ -143,8 +144,8 @@ $(".pages.space_shooter").ready( function() {
       boss.anchor.setTo(0.5, 0.5);
       boss.damageAmount = 50;
       boss.angle = 180;
-      boss.scale.x = 0.6;
-      boss.scale.y = 0.6;
+      boss.scale.x = 0.1;
+      boss.scale.y = 0.1;
       game.physics.enable(boss, Phaser.Physics.ARCADE);
       boss.body.maxVelocity.setTo(100, 80);
       boss.dying = false;
@@ -264,7 +265,7 @@ $(".pages.space_shooter").ready( function() {
 
         //  Squish and rotate boss for illusion of "banking"
         var bank = boss.body.velocity.x / MAXSPEED;
-        boss.scale.x = 0.6 - Math.abs(bank) / 3;
+        boss.scale.x = 0.1 - Math.abs(bank) / 3;
         boss.angle = 180 - bank * 20;
 
         booster.x = boss.x + -5 * bank;
@@ -389,7 +390,7 @@ $(".pages.space_shooter").ready( function() {
 
       //squish and rotate ship for illusion of banking
       bank = player.body.velocity.x / MAXSPEED;
-      player.scale.x = 1 - Math.abs(bank) / 2;
+      player.scale.x = 0.15 - Math.abs(bank) / 3;
       player.angle = bank * 30;
 
       //keep the shipTrail lined up with the ships
