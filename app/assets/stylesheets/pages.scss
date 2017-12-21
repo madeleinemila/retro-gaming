@@ -166,3 +166,13 @@ a{
 a:hover {
     text-decoration: underline;
 }
+
+.home-button {
+  position: absolute;
+  top: 10px;
+}
+
+.home-button > img {
+  height: 50px;
+  width: 50px;
+}
