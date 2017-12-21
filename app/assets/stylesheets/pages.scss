@@ -37,8 +37,9 @@
 }
 
 body{
-  background-image: image-url("retro-wallpaper-1.jpg");
+  background-image: image-url("retro-wallpaper-cent.jpg");
   background-size: cover;
+  background-position-x: center;
 }
 
 .container{
@@ -187,7 +188,7 @@ a:hover {
 
 .high-scores {
   display: grid;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr 250px;
   max-width: 640px;
   margin: 0 auto;
 }
