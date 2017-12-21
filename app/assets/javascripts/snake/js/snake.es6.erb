@@ -118,7 +118,7 @@ $( ".pages.snake" ).ready( function () {
           snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
           snake.grow = false;
           if ( snake.length > highScore ) {
-             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
+             $.post(`https://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
              // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
                console.log('Player 1' + res);
              });
@@ -197,7 +197,7 @@ $( ".pages.snake" ).ready( function () {
           snake2.grow = false;
           if ( snake.length > highScore ) {
              // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
+             $.post(`https://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
                console.log('Player 2' + res);
              });
           }
