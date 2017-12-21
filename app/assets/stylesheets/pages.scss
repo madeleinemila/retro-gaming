@@ -79,6 +79,7 @@ body{
   transform: skew(-3deg,0deg);
   font-family: 'Audiowide', cursive;
   font-size: 21px;
+  padding-top: 6px;
   @include screen;
 }
 
@@ -96,7 +97,7 @@ body{
   grid-row: 3/5;
   background: linear-gradient(to bottom right, #404040, white);
   font-family: 'Orbitron', sans-serif;
-  padding:10px;
+  padding: 10px;
   @include screen;
 }
 
@@ -113,7 +114,9 @@ body{
   background: linear-gradient(to bottom right, #404040, white);
   transform-origin: top right;
   transform: skew(3deg,0deg);
-  font-family: 'Bungee Inline', cursive;
+  // font-family: 'Bungee Inline', cursive;
+  font-family: 'Orbitron', cursive;
+  padding-top: 10px;
   @include screen;
 }
 
@@ -166,24 +169,26 @@ body{
   background-image: image-url("0001.png");
 }
 
-// .monster{
-//   grid-column: 1/22;
-//   grid-row:3/6;
-//   background-image: image-url("monster.png");
-//   z-index: 2;
-//   visibility: visible;
-// }
+.monster{
+  grid-column: 1/22;
+  grid-row:3/6;
+  background-image: image-url("monster.png");
+  z-index: 2;
+  visibility: visible;
+}
 
-// .monster:hover{
-// visibility: hidden;
-// }
+.monster:hover{
+visibility: hidden;
+}
 
 a{
   text-decoration: none;
+  color: black;
 }
 
 a:hover {
-    text-decoration: underline;
+  // text-decoration: underline;
+  color: white;
 }
 
 .home-button {
@@ -194,4 +199,14 @@ a:hover {
 .home-button > img {
   height: 50px;
   width: 50px;
+}
+
+
+// SNAAK AND ROIDS BEST SCORE AREAS
+
+.high-scores {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  max-width: 640px;
+  margin: 0 auto;
 }

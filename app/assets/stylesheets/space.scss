@@ -6,14 +6,22 @@
 // }
 
 
-.space-container h1{
+.space-container h1 {
   font-family: 'Bungee Inline', cursive;
   color: #4361b2;
   text-align: center;
-  padding-bottom: 30px;
-  padding-top: 30px;
+  // padding-bottom: 30px;
+  // padding-top: 30px;
+  margin: 30px;
   font-size: 60px;
 }
+
+.space-container h2 {
+  @extend h1;
+  font-size: 40px;
+}
+
+
 
 .space_shooter{
   background-image: image-url("hook.jpg");

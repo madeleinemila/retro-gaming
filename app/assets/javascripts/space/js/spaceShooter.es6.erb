@@ -24,7 +24,7 @@ $(".pages.space_shooter").ready( function() {
     var fireButton;
     var bulletTimer = 0;
     var shields;
-    var score = 14000;
+    var score = 0;
     var scoreText;
 
     var greenEnemyLaunchTimer;
@@ -42,6 +42,8 @@ $(".pages.space_shooter").ready( function() {
     var bossDeath;
 
     var gameOver;
+    var tapRestart;
+    var spaceRestart;
 
 
     var ACCLERATION = 600;
@@ -425,13 +427,13 @@ $(".pages.space_shooter").ready( function() {
       game.physics.arcade.overlap(blueEnemyBullets, player, enemyHitsPlayer, null, this);
 
       //gameover?
-          if (! player.alive && gameOver.visible === false) {
+        if (! player.alive && gameOver.visible === false) {
 
           if ( score > highScore ) {
              // POST request...
-             // $.post(`http://localhost:3000/space/${ score }`).done((res) => {
-             $.post(`http://gehms.herokuapp.com/space/${ score }`).done((res) => {
-               console.log(res);
+             // $.post(`http://localhost:3000/roids/${ score }`).done((res) => {
+             $.post(`https://gehms.herokuapp.com/roids/${ score }`).done((res) => {
+               $('#space-score').text( score );
              });
            }
 

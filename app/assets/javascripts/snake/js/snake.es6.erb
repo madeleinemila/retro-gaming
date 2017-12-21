@@ -1,6 +1,4 @@
 $( ".pages.snake" ).ready( function () {
-  const game = new Phaser.Game( 640, 480, Phaser.AUTO, 'snake', { preload: preload, create: create, update:update } );
-
   // Globals
 
   const highScore = <%= Score.first.snaak %>
@@ -26,237 +24,282 @@ $( ".pages.snake" ).ready( function () {
   const GRID_WIDTH = ( CANVAS_WIDTH / BLOCK_SIZE ) - 1;
   const GRID_HEIGHT = ( CANVAS_HEIGHT / BLOCK_SIZE ) - 1;
 
-  function preload () {
-    this.load.image( 'food', "<%= asset_path( 'snake/food.png' ) %>")
-    this.load.image( 'body', "<%= asset_path( 'snake/body.png' ) %>")
-  }
+  const startState = {
+    create: function () {
+      game.stage.backgroundColor = '#F7DA00';
 
-  function create () {
-    game.stage.backgroundColor = '#F7DA00';
+      const nameLabel = game.add.text( 80, 80, 'Snaak', { font: '50px Courier', fill: '#000' } );
+      const startLabel = game.add.text( 80, game.world.height - 80, 'Press space to start', { font: '25px Arial', fill: '#000' } );
 
-    snake = [];
-    snake[0] = game.add.sprite( ( 8 * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
-    snake.speed = 0;
-    snake.grow = false;
-    snake.alive = true;
+      const spacebar = game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
+      spacebar.onDown.addOnce( this.start, this );
+    },
 
-    snake2 = [];
-    snake2[0] = game.add.sprite( ( GRID_WIDTH - 8 ) * BLOCK_SIZE , ( GRID_HEIGHT - 8 ) * BLOCK_SIZE , 'body' );
-    snake2.speed = 0;
-    snake2.grow = false;
-    snake2.alive = true;
-
-    snake.updateDelay = 0;
-
-    generateFood();
-
-    cursors = game.input.keyboard.createCursorKeys();
-
-    wasd = {
-      up: game.input.keyboard.addKey( Phaser.Keyboard.W ),
-      down: game.input.keyboard.addKey( Phaser.Keyboard.S ),
-      left: game.input.keyboard.addKey( Phaser.Keyboard.A ),
-      right: game.input.keyboard.addKey( Phaser.Keyboard.D )
+    start: function () {
+      game.state.start( 'play' );
     }
   }
 
-  function update () {
-    snake.updateDelay++;
+  const playState = {
+    preload: function () {
+      this.load.image( 'food', "<%= asset_path( 'snake/food.png' ) %>");
+      this.load.image( 'body', "<%= asset_path( 'snake/body.png' ) %>");
+    },
 
-    if ( snake.alive ) {
-      // Snake movement
-      if ( ( cursors.left.isDown || hardwareL ) && snake.direction !== RIGHT ) {
-        snake.newDirection = LEFT;
-      }
-      if ( ( cursors.right.isDown || hardwareR ) && snake.direction !== LEFT ) {
-        snake.newDirection = RIGHT;
-      }
-      if ( ( cursors.up.isDown || hardwareU ) && snake.direction !== DOWN ) {
-        snake.newDirection = UP;
-      }
-      if ( ( cursors.down.isDown || hardwareD ) && snake.direction !== UP ) {
-        snake.newDirection = DOWN;
-      }
+    create: function () {
+      snake = [];
+      snake[0] = game.add.sprite( ( 8 * BLOCK_SIZE ), ( 8 * BLOCK_SIZE ), 'body' );
+      snake.speed = 0;
+      snake.grow = false;
+      snake.alive = true;
 
-      if ( snake.updateDelay % ( 10 - snake.speed ) === 0 ) {
-        let firstSegment = snake[ snake.length - 1 ];
-        const lastSegment = snake.shift();
-        const oldLastSegmentX = lastSegment.x;
-        const oldLastSegmentY = lastSegment.y;
+      snake2 = [];
+      snake2[0] = game.add.sprite( ( GRID_WIDTH - 8 ) * BLOCK_SIZE , ( GRID_HEIGHT - 8 ) * BLOCK_SIZE , 'body' );
+      snake2.speed = 0;
+      snake2.grow = false;
+      snake2.alive = true;
 
-        if ( snake.newDirection ) {
-          snake.direction = snake.newDirection;
-          snake.newDirection = null;
+      snake.updateDelay = 0;
+
+      this.generateFood();
+
+      cursors = game.input.keyboard.createCursorKeys();
+
+      wasd = {
+        up: game.input.keyboard.addKey( Phaser.Keyboard.W ),
+        down: game.input.keyboard.addKey( Phaser.Keyboard.S ),
+        left: game.input.keyboard.addKey( Phaser.Keyboard.A ),
+        right: game.input.keyboard.addKey( Phaser.Keyboard.D )
+      }
+    },
+
+    update: function () {
+      if ( !snake.alive && !snake2.alive ) {
+        this.End();
+      }
+      snake.updateDelay++;
+
+      if ( snake.alive ) {
+        // Snake movement
+        if ( ( cursors.left.isDown || hardwareL ) && snake.direction !== RIGHT ) {
+          snake.newDirection = LEFT;
+        }
+        if ( ( cursors.right.isDown || hardwareR ) && snake.direction !== LEFT ) {
+          snake.newDirection = RIGHT;
+        }
+        if ( ( cursors.up.isDown || hardwareU ) && snake.direction !== DOWN ) {
+          snake.newDirection = UP;
+        }
+        if ( ( cursors.down.isDown || hardwareD ) && snake.direction !== UP ) {
+          snake.newDirection = DOWN;
         }
 
-        switch ( snake.direction ) {
-          case LEFT:
-          lastSegment.x = firstSegment.x - BLOCK_SIZE;
-          lastSegment.y = firstSegment.y;
-          break;
-          case RIGHT:
-          lastSegment.x = firstSegment.x + BLOCK_SIZE;
-          lastSegment.y = firstSegment.y;
-          break;
-          case UP:
-          // console.log( 'going up' );
-          lastSegment.x = firstSegment.x;
-          lastSegment.y = firstSegment.y - BLOCK_SIZE;
-          break;
-          case DOWN:
-          lastSegment.x = firstSegment.x;
-          lastSegment.y = firstSegment.y + BLOCK_SIZE;
-          break;
-        }
+        if ( snake.updateDelay % ( 10 - snake.speed ) === 0 ) {
+          let firstSegment = snake[ snake.length - 1 ];
+          const lastSegment = snake.shift();
+          const oldLastSegmentX = lastSegment.x;
+          const oldLastSegmentY = lastSegment.y;
 
-        snake.push( lastSegment );
-        firstSegment = lastSegment;
-
-        // Increase snake length
-        if ( snake.grow ) {
-          snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
-          snake.grow = false;
-          if ( snake.length > highScore ) {
-             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
-             // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-               console.log('Player 1' + res);
-             });
+          if ( snake.newDirection ) {
+            snake.direction = snake.newDirection;
+            snake.newDirection = null;
           }
 
-          if ( snake.length % 3 === 0 ) {
-            snake.speed++
-          }
-        }
-
-        collideWithFood( snake, firstSegment, food );
-
-        collideWithSelf( snake, firstSegment );
-
-        collideWithWall( snake, firstSegment );
-
-        collideWithEnemy( snake, firstSegment, snake2 );
-
-      }
-      // End snake movement
-    }
-    if ( snake2.alive ) {
-      // Snake2 movement
-      if ( ( wasd.left.isDown || hardwareL2 ) && snake2.direction !== RIGHT ) {
-        snake2.newDirection = LEFT;
-      }
-      if ( ( wasd.right.isDown || hardwareR2 ) && snake2.direction !== LEFT ) {
-        snake2.newDirection = RIGHT;
-      }
-      if ( ( wasd.up.isDown || hardwareU2 ) && snake2.direction !== DOWN ) {
-        snake2.newDirection = UP;
-      }
-      if ( ( wasd.down.isDown || hardwareD2 ) && snake2.direction !== UP ) {
-        snake2.newDirection = DOWN;
-      }
-      if ( !snake.alive ) {
-
-      }
-      if ( snake.updateDelay % ( 10 - snake2.speed ) === 0 ) {
-        let firstSegment2 = snake2[ snake2.length - 1 ];
-        const lastSegment2 = snake2.shift();
-        const oldLastSegmentX2 = lastSegment2.x;
-        const oldLastSegmentY2 = lastSegment2.y;
-
-        if ( snake2.newDirection ) {
-          snake2.direction = snake2.newDirection;
-          snake2.newDirection = null;
-        }
-
-        switch ( snake2.direction ) {
-          case LEFT:
-          lastSegment2.x = firstSegment2.x - BLOCK_SIZE;
-          lastSegment2.y = firstSegment2.y;
-          break;
-          case RIGHT:
-          lastSegment2.x = firstSegment2.x + BLOCK_SIZE;
-          lastSegment2.y = firstSegment2.y;
-          break;
-          case UP:
-          // console.log( 'going up' );
-          lastSegment2.x = firstSegment2.x;
-          lastSegment2.y = firstSegment2.y - BLOCK_SIZE;
-          break;
-          case DOWN:
-          lastSegment2.x = firstSegment2.x;
-          lastSegment2.y = firstSegment2.y + BLOCK_SIZE;
-          break;
-        }
-
-        snake2.push( lastSegment2 );
-        firstSegment2 = lastSegment2;
-
-        // Increase snake2 length
-        if ( snake2.grow ) {
-          snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
-          snake2.grow = false;
-          if ( snake.length > highScore ) {
-             // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-             $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
-               console.log('Player 2' + res);
-             });
+          switch ( snake.direction ) {
+            case LEFT:
+            lastSegment.x = firstSegment.x - BLOCK_SIZE;
+            lastSegment.y = firstSegment.y;
+            break;
+            case RIGHT:
+            lastSegment.x = firstSegment.x + BLOCK_SIZE;
+            lastSegment.y = firstSegment.y;
+            break;
+            case UP:
+            // console.log( 'going up' );
+            lastSegment.x = firstSegment.x;
+            lastSegment.y = firstSegment.y - BLOCK_SIZE;
+            break;
+            case DOWN:
+            lastSegment.x = firstSegment.x;
+            lastSegment.y = firstSegment.y + BLOCK_SIZE;
+            break;
           }
 
-          if ( snake2.length % 3 === 0 ) {
-            snake2.speed++
+          snake.push( lastSegment );
+          firstSegment = lastSegment;
+
+          // Increase snake length
+          if ( snake.grow ) {
+            snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
+            snake.grow = false;
+            if ( snake.length > highScore ) {
+               $.post(`http://gehms.herokuapp.com/snaak/${ snake.length }`).done((res) => {
+               // $.post(`http://localhost:3000/snaak/${ snake.length }`).done((res) => {
+                 $('#snake-score').text( snake.length );
+               });
+            }
+
+            if ( snake.length % 3 === 0 ) {
+              snake.speed++
+            }
           }
+
+          this.collideWithFood( snake, firstSegment, food );
+
+          this.collideWithSelf( snake, firstSegment );
+
+          this.collideWithWall( snake, firstSegment );
+
+          this.collideWithEnemy( snake, firstSegment, snake2 );
+
         }
-
-        collideWithFood( snake2, firstSegment2, food );
-
-        collideWithSelf( snake2, firstSegment2 );
-
-        collideWithWall( snake2, firstSegment2 );
-
-        collideWithEnemy( snake2, firstSegment2, snake );
-
+        // End snake movement
       }
-      // End snake2 movement
-    }
-  } // End update
+      if ( snake2.alive ) {
+        // Snake2 movement
+        if ( ( wasd.left.isDown || hardwareL2 ) && snake2.direction !== RIGHT ) {
+          snake2.newDirection = LEFT;
+        }
+        if ( ( wasd.right.isDown || hardwareR2 ) && snake2.direction !== LEFT ) {
+          snake2.newDirection = RIGHT;
+        }
+        if ( ( wasd.up.isDown || hardwareU2 ) && snake2.direction !== DOWN ) {
+          snake2.newDirection = UP;
+        }
+        if ( ( wasd.down.isDown || hardwareD2 ) && snake2.direction !== UP ) {
+          snake2.newDirection = DOWN;
+        }
+        if ( !snake.alive ) {
 
-  function generateFood() {
-    const x = _.random( GRID_WIDTH ) * BLOCK_SIZE;
-    const y = _.random( GRID_HEIGHT ) * BLOCK_SIZE;
+        }
+        if ( snake.updateDelay % ( 10 - snake2.speed ) === 0 ) {
+          let firstSegment2 = snake2[ snake2.length - 1 ];
+          const lastSegment2 = snake2.shift();
+          const oldLastSegmentX2 = lastSegment2.x;
+          const oldLastSegmentY2 = lastSegment2.y;
 
-    food = game.add.sprite( x, y, 'food' )
-  }
+          if ( snake2.newDirection ) {
+            snake2.direction = snake2.newDirection;
+            snake2.newDirection = null;
+          }
 
-  function collideWithFood ( player, head, food ) {
-    if ( head.x === food.x && head.y === food.y ) {
-      food.destroy();
-      generateFood();
-      player.grow = true;
-    }
-  }
+          switch ( snake2.direction ) {
+            case LEFT:
+            lastSegment2.x = firstSegment2.x - BLOCK_SIZE;
+            lastSegment2.y = firstSegment2.y;
+            break;
+            case RIGHT:
+            lastSegment2.x = firstSegment2.x + BLOCK_SIZE;
+            lastSegment2.y = firstSegment2.y;
+            break;
+            case UP:
+            // console.log( 'going up' );
+            lastSegment2.x = firstSegment2.x;
+            lastSegment2.y = firstSegment2.y - BLOCK_SIZE;
+            break;
+            case DOWN:
+            lastSegment2.x = firstSegment2.x;
+            lastSegment2.y = firstSegment2.y + BLOCK_SIZE;
+            break;
+          }
 
-  function collideWithSelf ( player, head ) {
-    for ( let i = 0; i < player.length - 1; i++ ) {
-      if ( head.x === player[i].x && head.y === player[i].y ) {
+          snake2.push( lastSegment2 );
+          firstSegment2 = lastSegment2;
+
+          // Increase snake2 length
+          if ( snake2.grow ) {
+            snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
+            snake2.grow = false;
+            if ( snake2.length > highScore ) {
+               // $.post(`http://localhost:3000/snaak/${ snake2.length }`).done((res) => {
+               $.post(`http://gehms.herokuapp.com/snaak/${ snake2.length }`).done((res) => {
+                 $('#snake-score').text( snake2.length );
+               });
+            }
+
+            if ( snake2.length % 3 === 0 ) {
+              snake2.speed++
+            }
+          }
+
+          this.collideWithFood( snake2, firstSegment2, food );
+
+          this.collideWithSelf( snake2, firstSegment2 );
+
+          this.collideWithWall( snake2, firstSegment2 );
+
+          this.collideWithEnemy( snake2, firstSegment2, snake );
+
+        }
+        // End snake2 movement
+      }
+    }, // End update
+
+    generateFood: function() {
+      const x = _.random( GRID_WIDTH ) * BLOCK_SIZE;
+      const y = _.random( GRID_HEIGHT ) * BLOCK_SIZE;
+
+      food = game.add.sprite( x, y, 'food' )
+    },
+
+    collideWithFood: function ( player, head, food ) {
+      if ( head.x === food.x && head.y === food.y ) {
+        food.destroy();
+        this.generateFood();
+        player.grow = true;
+      }
+    },
+
+    collideWithSelf: function ( player, head ) {
+      for ( let i = 0; i < player.length - 1; i++ ) {
+        if ( head.x === player[i].x && head.y === player[i].y ) {
+          player.alive = false;
+          return;
+        }
+      }
+    },
+
+    collideWithWall: function ( player, head ) {
+      if ( head.x >= CANVAS_WIDTH || head.x < 0 || head.y >= CANVAS_HEIGHT || head.y < 0 ) {
         player.alive = false;
         return;
       }
-    }
-  }
+    },
 
-  function collideWithWall ( player, head ) {
-    if ( head.x >= CANVAS_WIDTH || head.x < 0 || head.y >= CANVAS_HEIGHT || head.y < 0 ) {
-      player.alive = false;
-      return;
-    }
-  }
-
-  function collideWithEnemy ( player, head, enemy ) {
-    for ( let i = 0; i < enemy.length; i++ ) {
-      if ( head.x === enemy[i].x && head.y === enemy[i].y ) {
-        player.alive = false;
-        return;
+    collideWithEnemy: function ( player, head, enemy ) {
+      for ( let i = 0; i < enemy.length; i++ ) {
+        if ( head.x === enemy[i].x && head.y === enemy[i].y ) {
+          player.alive = false;
+          return;
+        }
       }
+    },
+
+    End: function () {
+      game.state.start( 'end' );
     }
   }
+
+  const endState = {
+    create: function () {
+      const winLabel = game.add.text( 80, 80, 'Play again?', { font: '50px Courier', fill: '#000' } );
+      const restartLabel = game.add.text( 80, game.world.height - 80, 'press spacebar to restart', { font: '25px Arial', fill: '#000' } );
+      const spacebar = game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
+      spacebar.onDown.addOnce( this.restart, this );
+    },
+
+    restart: function () {
+      game.state.start( 'play' );
+    }
+  }
+
+  const game = new Phaser.Game( 640, 480, Phaser.AUTO, 'snake' );
+
+  // States
+  game.state.add( 'start', startState );
+  game.state.add( 'play', playState );
+  game.state.add( 'end', endState );
+
+  game.state.start( 'start' );
 
 } );
