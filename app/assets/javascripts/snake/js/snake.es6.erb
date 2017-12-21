@@ -135,7 +135,7 @@ $( ".pages.snake" ).ready( function () {
             if ( snake.length > highScore ) {
                $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
                // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-                 console.log('Player 1' + res);
+                 $('#snake-score').text( snake.length );
                });
             }
 
@@ -210,10 +210,10 @@ $( ".pages.snake" ).ready( function () {
           if ( snake2.grow ) {
             snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
             snake2.grow = false;
-            if ( snake.length > highScore ) {
-               // $.post(`http://localhost:3000/snake/${ snake.length }`).done((res) => {
-               $.post(`http://gehms.herokuapp.com/snake/${ snake.length }`).done((res) => {
-                 console.log('Player 2' + res);
+            if ( snake2.length > highScore ) {
+               // $.post(`http://localhost:3000/snake/${ snake2.length }`).done((res) => {
+               $.post(`http://gehms.herokuapp.com/snake/${ snake2.length }`).done((res) => {
+                 $('#snake-score').text( snake2.length );
                });
             }
 
