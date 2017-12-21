@@ -42,6 +42,8 @@ $(".pages.space_shooter").ready( function() {
     var bossDeath;
 
     var gameOver;
+    var tapRestart;
+    var spaceRestart;
 
 
     var ACCLERATION = 600;
@@ -425,7 +427,7 @@ $(".pages.space_shooter").ready( function() {
       game.physics.arcade.overlap(blueEnemyBullets, player, enemyHitsPlayer, null, this);
 
       //gameover?
-          if (! player.alive && gameOver.visible === false) {
+        if (! player.alive && gameOver.visible === false) {
 
           if ( score > highScore ) {
              // POST request...
