@@ -63,16 +63,16 @@ $( ".pages.snake" ).ready( function () {
 
     if ( snake.alive ) {
       // Snake movement
-      if ( cursors.left.isDown && snake.direction !== RIGHT ) {
+      if ( ( cursors.left.isDown || hardwareL ) && snake.direction !== RIGHT ) {
         snake.newDirection = LEFT;
       }
-      if ( cursors.right.isDown && snake.direction !== LEFT ) {
+      if ( ( cursors.right.isDown || hardwareR ) && snake.direction !== LEFT ) {
         snake.newDirection = RIGHT;
       }
-      if ( cursors.up.isDown && snake.direction !== DOWN ) {
+      if ( ( cursors.up.isDown || hardwareU ) && snake.direction !== DOWN ) {
         snake.newDirection = UP;
       }
-      if ( cursors.down.isDown && snake.direction !== UP ) {
+      if ( ( cursors.down.isDown || hardwareD ) && snake.direction !== UP ) {
         snake.newDirection = DOWN;
       }
 
@@ -133,16 +133,16 @@ $( ".pages.snake" ).ready( function () {
     }
     if ( snake2.alive ) {
       // Snake2 movement
-      if ( wasd.left.isDown && snake2.direction !== RIGHT ) {
+      if ( ( wasd.left.isDown || hardwareL2 ) && snake2.direction !== RIGHT ) {
         snake2.newDirection = LEFT;
       }
-      if ( wasd.right.isDown && snake2.direction !== LEFT ) {
+      if ( ( wasd.right.isDown || hardwareR2 ) && snake2.direction !== LEFT ) {
         snake2.newDirection = RIGHT;
       }
-      if ( wasd.up.isDown && snake2.direction !== DOWN ) {
+      if ( ( wasd.up.isDown || hardwareU2 ) && snake2.direction !== DOWN ) {
         snake2.newDirection = UP;
       }
-      if ( wasd.down.isDown && snake2.direction !== UP ) {
+      if ( ( wasd.down.isDown || hardwareD2 ) && snake2.direction !== UP ) {
         snake2.newDirection = DOWN;
       }
       if ( !snake.alive ) {
