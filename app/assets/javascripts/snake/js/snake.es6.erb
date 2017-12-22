@@ -25,11 +25,46 @@ $( ".pages.snake" ).ready( function () {
   const GRID_HEIGHT = ( CANVAS_HEIGHT / BLOCK_SIZE ) - 1;
 
   const startState = {
+    preload: function () {
+      this.load.image( 'downArrow', "<%= asset_path( 'snake/computer_key_Arrow_Down_T' ) %>" );
+      this.load.image( 'upArrow', "<%= asset_path( 'snake/computer_key_Arrow_Up_T' ) %>" );
+      this.load.image( 'leftArrow', "<%= asset_path( 'snake/computer_key_Arrow_Left_T' ) %>" );
+      this.load.image( 'rightArrow', "<%= asset_path( 'snake/computer_key_Arrow_Right_T' ) %>" );
+
+      this.load.image( 'wKey', "<%= asset_path( 'snake/computer_key_W_T' ) %>" );
+      this.load.image( 'aKey', "<%= asset_path( 'snake/computer_key_A_T' ) %>" );
+      this.load.image( 'sKey', "<%= asset_path( 'snake/computer_key_S_T' ) %>" );
+      this.load.image( 'dKey', "<%= asset_path( 'snake/computer_key_D_T' ) %>" );
+    },
+
     create: function () {
       game.stage.backgroundColor = '#F7DA00';
 
-      const nameLabel = game.add.text( 80, 80, 'Snaak', { font: '50px Courier', fill: '#000' } );
+      const controlsLabel = game.add.text( 60, 80, 'Controls', { font: '50px Courier', fill: '#000' } );
+      const player1Label = game.add.text( 110, CANVAS_HEIGHT * ( 4 / 11 ), 'Player 1', { font: '25px Courier', fill: '#000' } );
+      const player2Label = game.add.text( CANVAS_WIDTH - 230, CANVAS_HEIGHT * ( 4 / 11 ), 'Player 2', { font: '25px Courier', fill: '#000' } );
       const startLabel = game.add.text( 80, game.world.height - 80, 'Press space to start', { font: '25px Arial', fill: '#000' } );
+
+      const aKey = this.add.image( ( CANVAS_WIDTH / 8 ) + 0, ( CANVAS_HEIGHT / 2 ) + 60, 'aKey' );
+      const sKey = this.add.image( ( CANVAS_WIDTH / 8 ) + 60, ( ( CANVAS_HEIGHT ) / 2 ) + 60, 'sKey' );
+      const dKey = this.add.image( ( CANVAS_WIDTH / 8 ) + 120, ( ( CANVAS_HEIGHT ) / 2 ) + 60, 'dKey' );
+      const wKey = this.add.image( ( CANVAS_WIDTH / 8 ) + 60, ( ( CANVAS_HEIGHT ) / 2 ) + 0, 'wKey' );
+
+      aKey.scale.setTo( 0.1, 0.1 );
+      dKey.scale.setTo( 0.1, 0.1 );
+      wKey.scale.setTo( 0.1, 0.1 );
+      sKey.scale.setTo( 0.1, 0.1 );
+
+      const leftArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 180 ), ( CANVAS_HEIGHT / 2 ) + 60, 'leftArrow' );
+      const downArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 120 ), ( CANVAS_HEIGHT / 2 ) + 60, 'downArrow' );
+      const rightArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 60 ), ( CANVAS_HEIGHT / 2 ) + 60, 'rightArrow' );
+      const upArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 120 ), ( CANVAS_HEIGHT / 2 ) + 0, 'upArrow' );
+      console.log( upArrow, downArrow );
+
+      leftArrow.scale.setTo( 0.1, 0.1 );
+      downArrow.scale.setTo( 0.1, 0.1 );
+      rightArrow.scale.setTo( 0.1, 0.1 );
+      upArrow.scale.setTo( 0.1, 0.1 );
 
       const spacebar = game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
       spacebar.onDown.addOnce( this.start, this );
@@ -87,16 +122,16 @@ $( ".pages.snake" ).ready( function () {
 
       if ( snake.alive ) {
         // Snake movement
-        if ( ( cursors.left.isDown || hardwareL ) && snake.direction !== RIGHT ) {
+        if ( ( wasd.left.isDown || hardwareL ) && snake.direction !== RIGHT ) {
           snake.newDirection = LEFT;
         }
-        if ( ( cursors.right.isDown || hardwareR ) && snake.direction !== LEFT ) {
+        if ( ( wasd.right.isDown || hardwareR ) && snake.direction !== LEFT ) {
           snake.newDirection = RIGHT;
         }
-        if ( ( cursors.up.isDown || hardwareU ) && snake.direction !== DOWN ) {
+        if ( ( wasd.up.isDown || hardwareU ) && snake.direction !== DOWN ) {
           snake.newDirection = UP;
         }
-        if ( ( cursors.down.isDown || hardwareD ) && snake.direction !== UP ) {
+        if ( ( wasd.down.isDown || hardwareD ) && snake.direction !== UP ) {
           snake.newDirection = DOWN;
         }
 
@@ -164,16 +199,16 @@ $( ".pages.snake" ).ready( function () {
       }
       if ( snake2.alive ) {
         // Snake2 movement
-        if ( ( wasd.left.isDown || hardwareL2 ) && snake2.direction !== RIGHT ) {
+        if ( ( cursors.left.isDown || hardwareL2 ) && snake2.direction !== RIGHT ) {
           snake2.newDirection = LEFT;
         }
-        if ( ( wasd.right.isDown || hardwareR2 ) && snake2.direction !== LEFT ) {
+        if ( ( cursors.right.isDown || hardwareR2 ) && snake2.direction !== LEFT ) {
           snake2.newDirection = RIGHT;
         }
-        if ( ( wasd.up.isDown || hardwareU2 ) && snake2.direction !== DOWN ) {
+        if ( ( cursors.up.isDown || hardwareU2 ) && snake2.direction !== DOWN ) {
           snake2.newDirection = UP;
         }
-        if ( ( wasd.down.isDown || hardwareD2 ) && snake2.direction !== UP ) {
+        if ( ( cursors.down.isDown || hardwareD2 ) && snake2.direction !== UP ) {
           snake2.newDirection = DOWN;
         }
         if ( !snake.alive ) {
