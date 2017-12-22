@@ -326,7 +326,7 @@ $( ".pages.snake" ).ready( function () {
   const endState = {
     create: function () {
       const winLabel = game.add.text( 80, 80, 'Play again?', { font: '50px Courier', fill: '#000' } );
-      const restartLabel = game.add.text( 80, game.world.height - 80, 'press spacebar to restart', { font: '25px Arial', fill: '#000' } );
+      const restartLabel = game.add.text( 80, game.world.height - 80, 'Press space to restart', { font: '25px Arial', fill: '#000' } );
       const spacebar = game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
       spacebar.onDown.addOnce( this.restart, this );
     },
