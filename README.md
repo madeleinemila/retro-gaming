@@ -3,8 +3,11 @@
 ### Built by
 
 Cassandra Essex
+
 Justin Gan
+
 Madeleine Milasas
+
 Sheren To
 
 
@@ -22,17 +25,20 @@ Sheren To
 
 ### How to play
 
-[Deployed on Heroku](http://gehms.herokuapp.com/)
+[Deployed on Heroku here](http://gehms.herokuapp.com/)
 
 Keyboard controls are displayed in-game
 
 SNAAK
+
 1 or 2 players
 
 PING
+
 2 player only
 
 ROIDS
+
 1 player only
 
 
