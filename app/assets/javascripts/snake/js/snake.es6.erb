@@ -35,6 +35,12 @@ $( ".pages.snake" ).ready( function () {
       spacebar.onDown.addOnce( this.start, this );
     },
 
+    update: function () {
+      if ( hardwareU || hardwareU2 ) {
+        this.start();
+      }
+    },
+
     start: function () {
       game.state.start( 'play' );
     }
@@ -288,6 +294,12 @@ $( ".pages.snake" ).ready( function () {
       const restartLabel = game.add.text( 80, game.world.height - 80, 'press spacebar to restart', { font: '25px Arial', fill: '#000' } );
       const spacebar = game.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
       spacebar.onDown.addOnce( this.restart, this );
+    },
+
+    update: function () {
+      if ( hardwareU || hardwareU2 ) {
+        this.restart();
+      }
     },
 
     restart: function () {
