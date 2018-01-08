@@ -1,7 +1,12 @@
-
+let highScoreRoids;
 
 
 $(".pages.space_shooter").ready( function() {
+    // Get latest high score
+    // $.getJSON('http://localhost:3000/roids').done((r) => {
+    $.getJSON('http://gehms.herokuapp.com/roids').done((r) => {
+        highScoreRoids = r;
+    });
 
     var game = new Phaser.Game(800, 600, Phaser.AUTO, 'space_shooter', {preload: preload, create: create, update: update, render: render});
 
@@ -48,8 +53,6 @@ $(".pages.space_shooter").ready( function() {
     var ACCLERATION = 600;
     var DRAG = 400;
     var MAXSPEED = 400;
-
-    var highScore = <%= Score.first.roids %>
 
 
     function preload() {
@@ -428,7 +431,7 @@ $(".pages.space_shooter").ready( function() {
       //gameover?
         if (! player.alive && gameOver.visible === false) {
 
-          if ( score > highScore ) {
+          if ( score > highScoreRoids ) {
              // POST request...
              // $.post(`http://localhost:3000/roids/${ score }`).done((res) => {
              $.post(`https://gehms.herokuapp.com/roids/${ score }`).done((res) => {

@@ -5,6 +5,11 @@ class PagesController < ApplicationController
 
   def snake
     @snaak_score = Score.first.snaak
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @snaak_score }
+     end
   end
 
   def snake_update
@@ -14,6 +19,11 @@ class PagesController < ApplicationController
 
   def space_shooter
     @roids_score = Score.first.roids
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @roids_score }
+     end
   end
 
   def space_shooter_update

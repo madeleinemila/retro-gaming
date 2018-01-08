@@ -1,7 +1,14 @@
-$( ".pages.snake" ).ready( function () {
-  // Globals
+let highScore;
 
-  let highScore = <%= Score.first.snaak %>
+
+$( ".pages.snake" ).ready( function () {
+  // Get latest high score
+  // $.getJSON('http://localhost:3000/snaak').done((r) => {
+  $.getJSON('http://gehms.herokuapp.com/snaak').done((r) => {
+      highScore = r;
+  });
+
+  // Globals
 
   let snake;
   let snake2;
@@ -174,8 +181,8 @@ $( ".pages.snake" ).ready( function () {
             snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
             snake.grow = false;
             if ( snake.length > highScore ) {
-               // $.post(`http://localhost:3000/snaak/${ snake.length }`).done((res) => {
-               $.post(`http://gehms.herokuapp.com/snaak/${ snake.length }`).done((res) => {
+               $.post(`http://localhost:3000/snaak/${ snake.length }`).done((res) => {
+               // $.post(`http://gehms.herokuapp.com/snaak/${ snake.length }`).done((res) => {
                  $('#snake-score').text( snake.length );
                  highScore = snake.length;
                });
@@ -253,8 +260,8 @@ $( ".pages.snake" ).ready( function () {
             snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
             snake2.grow = false;
             if ( snake2.length > highScore ) {
-               // $.post(`http://localhost:3000/snaak/${ snake2.length }`).done((res) => {
-               $.post(`http://gehms.herokuapp.com/snaak/${ snake2.length }`).done((res) => {
+               $.post(`http://localhost:3000/snaak/${ snake2.length }`).done((res) => {
+               // $.post(`http://gehms.herokuapp.com/snaak/${ snake2.length }`).done((res) => {
                  $('#snake-score').text( snake2.length );
                   highScore = snake2.length;
                });
