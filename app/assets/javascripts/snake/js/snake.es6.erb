@@ -66,7 +66,7 @@ $( ".pages.snake" ).ready( function () {
       const downArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 120 ), ( CANVAS_HEIGHT / 2 ) + 60, 'downArrow' );
       const rightArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 60 ), ( CANVAS_HEIGHT / 2 ) + 60, 'rightArrow' );
       const upArrow = this.add.image( -( CANVAS_WIDTH / 8 ) + ( CANVAS_WIDTH - 120 ), ( CANVAS_HEIGHT / 2 ) + 0, 'upArrow' );
-      console.log( upArrow, downArrow );
+      // console.log( upArrow, downArrow );
 
       leftArrow.scale.setTo( 0.1, 0.1 );
       downArrow.scale.setTo( 0.1, 0.1 );
@@ -181,8 +181,8 @@ $( ".pages.snake" ).ready( function () {
             snake.unshift( game.add.sprite( oldLastSegmentX, oldLastSegmentY, 'body' ) );
             snake.grow = false;
             if ( snake.length > highScore ) {
-               $.post(`http://localhost:3000/snaak/${ snake.length }`).done((res) => {
-               // $.post(`http://gehms.herokuapp.com/snaak/${ snake.length }`).done((res) => {
+               // $.post(`http://localhost:3000/snaak/${ snake.length }`).done((res) => {
+               $.post(`http://gehms.herokuapp.com/snaak/${ snake.length }`).done((res) => {
                  $('#snake-score').text( snake.length );
                  highScore = snake.length;
                });
@@ -260,8 +260,8 @@ $( ".pages.snake" ).ready( function () {
             snake2.unshift( game.add.sprite( oldLastSegmentX2, oldLastSegmentY2, 'body' ) );
             snake2.grow = false;
             if ( snake2.length > highScore ) {
-               $.post(`http://localhost:3000/snaak/${ snake2.length }`).done((res) => {
-               // $.post(`http://gehms.herokuapp.com/snaak/${ snake2.length }`).done((res) => {
+               // $.post(`http://localhost:3000/snaak/${ snake2.length }`).done((res) => {
+               $.post(`http://gehms.herokuapp.com/snaak/${ snake2.length }`).done((res) => {
                  $('#snake-score').text( snake2.length );
                   highScore = snake2.length;
                });
