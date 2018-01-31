@@ -52,7 +52,7 @@ This project was also built and demonstrated with custom Arduino controllers.
 If you'd like to play with your own Arduino setup:
 * You'll need 4 buttons/inputs for gameplay.
 * Upload `/arduino-contollers/arduino/basicSerialButtonWrite4BUTTON/basicSerialButtonWrite4BUTTON.ino` to your Arduino, ensuring the pin configuration is correct for your circuit.
-* All Node dependencies are in the `package.json` file.
+* All Node dependencies are in the `/arduino-controllers/package.json` file.
 * You may need to update the names of the serial ports in `/arduino-controllers/server.js` to match your system.
 * Run server.js from your command line
 `node server.js`
