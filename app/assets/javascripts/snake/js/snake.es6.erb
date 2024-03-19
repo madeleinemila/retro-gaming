@@ -1,12 +1,12 @@
 let highScore;
 
-function setNewHighScore(score) {
-  localStorage.setItem("snaakScore", score);
-  highScore = score;
-  $('#snake-score').text( score );
-}
-
 $( ".pages.snake" ).ready( function () {
+  function setNewHighScore(score) {
+    localStorage.setItem("snaakScore", score);
+    highScore = score;
+    $('#snake-score').text( score );
+  }
+
   // Get latest high score
   highScore = localStorage.getItem("snaakScore") || 0;
   $('#snake-score').text( highScore );

@@ -1,12 +1,12 @@
 let highScoreRoids;
 
-function setNewHighScore(score) {
-  localStorage.setItem("roidsScore", score);
-  highScoreRoids = score;
-  $('#space-score').text( score );
-}
-
 $(".pages.space_shooter").ready( function() {
+    function setNewHighScore(score) {
+      localStorage.setItem("roidsScore", score);
+      highScoreRoids = score;
+      $('#space-score').text( score );
+    }
+
     // Get latest high score
     highScoreRoids = localStorage.getItem("roidsScore") || 0;
     $('#space-score').text( highScoreRoids );
