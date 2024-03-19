@@ -2,7 +2,6 @@
 
 Retro in-browser games
 
-
 ### Built by
 
 Cassandra Essex
@@ -13,22 +12,19 @@ Madeleine Milasas
 
 Sheren To
 
-
-
 ### Built with
 
 - Phaser JavaScript framework v2
-- Ruby v2.4.2 on Rails v5.1.4
+- Ruby (v2.4.2) on Rails (v5.1.4) -> Updated to Ruby (v2.7.8) on Rails (v7.0)
 - HTML5
 - CSS3 / SASS
 - Node v8.9.0 with serialport, socket.io
 - Arduino Yun
 
-
-
 ### How to play
 
-[Check out Gehms live, deployed on Heroku at https://gehms.herokuapp.com/](https://gehms.herokuapp.com/)
+Check out Gehms live, deployed on Heroku at [https://gehms.herokuapp.com](https://gehms.herokuapp.com/).
+Note: no touch device support.
 
 #### KEYBOARD CONTROLS
 
@@ -42,8 +38,6 @@ SNAAK - 1 or 2 players
 PING - 2 player only
 
 ROIDS - 1 player only
-
-
 
 ### Hardware Controls
 
@@ -67,7 +61,6 @@ If you'd like to play with your own Arduino setup:
 ![Controller work in progress](http://res.cloudinary.com/mrmy/image/upload/v1517408251/controllers01_avyrag.jpg)
 ![Controllers](http://res.cloudinary.com/mrmy/image/upload/v1517408367/controllers02_iywryk.jpg)
 ![Controllers with side on angle](http://res.cloudinary.com/mrmy/image/upload/v1517408385/controllers03_lym3eu.jpg)
-
 
 ### Bugs & Future Fixes
 

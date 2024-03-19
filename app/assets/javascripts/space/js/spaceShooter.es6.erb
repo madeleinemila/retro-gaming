@@ -1,12 +1,15 @@
 let highScoreRoids;
 
+function setNewHighScore(score) {
+  localStorage.setItem("roidsScore", score);
+  highScoreRoids = score;
+  $('#space-score').text( score );
+}
 
 $(".pages.space_shooter").ready( function() {
     // Get latest high score
-    // $.getJSON('http://localhost:3000/roids').done((r) => {
-    $.getJSON('http://gehms.herokuapp.com/roids').done((r) => {
-        highScoreRoids = r;
-    });
+    highScoreRoids = localStorage.getItem("roidsScore") || 0;
+    $('#space-score').text( highScoreRoids );
 
     var game = new Phaser.Game(800, 600, Phaser.AUTO, 'space_shooter', {preload: preload, create: create, update: update, render: render});
 
@@ -432,12 +435,8 @@ $(".pages.space_shooter").ready( function() {
         if (! player.alive && gameOver.visible === false) {
 
           if ( score > highScoreRoids ) {
-             // POST request...
-             // $.post(`http://localhost:3000/roids/${ score }`).done((res) => {
-             $.post(`https://gehms.herokuapp.com/roids/${ score }`).done((res) => {
-               $('#space-score').text( score );
-             });
-           }
+            setNewHighScore( score );
+          }
 
 
            gameOver.visible = true;

@@ -26,6 +26,7 @@
 }
 
 body{
+  background-color: #ebc37d;
   background-image: image-url("retro-wallpaper-offset.jpg");
   background-size: cover;
 }
@@ -35,6 +36,10 @@ body{
   margin: 0 auto;
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
+}
+
+#home-container {
+  margin: 16px;
 }
 
 .container h1{

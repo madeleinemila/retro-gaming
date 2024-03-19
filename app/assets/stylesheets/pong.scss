@@ -1,11 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Orbitron:700'); //pong
-// font-family: 'Orbitron', sans-serif;
-
-// .home-button > img{
-//   height:50px;
-//   width:50px;
-// }
-
 .pong-container{
   color:#fff337;
 }
@@ -21,6 +13,7 @@
   background-color: rgba(40, 0, 0, 1.00); // fallback
   background-image: image-url("hook.jpg");
   background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .pong-container h1{
