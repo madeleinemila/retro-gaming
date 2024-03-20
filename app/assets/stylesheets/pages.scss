@@ -26,13 +26,14 @@
 }
 
 body{
-  background-color: #ebc37d;
+  background-color: #e3aa55;
   background-image: image-url("retro-wallpaper-offset.jpg");
   background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .container{
-  width: 960px;
+  max-width: 960px;
   margin: 0 auto;
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
@@ -165,7 +166,7 @@ body{
 }
 
 .ship{
-  grid-column: 19/32;
+  grid-column: 19/36;
   grid-row: 1/4;
   background-image: image-url("0001.png");
 }

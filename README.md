@@ -23,8 +23,7 @@ Sheren To
 
 ### How to play
 
-Check out Gehms live, deployed on Heroku at [https://gehms.herokuapp.com](https://gehms.herokuapp.com/).
-Note: no touch device support.
+Check out Gehms live, deployed on Render at [https://gehms.onrender.com](https://gehms.onrender.com/). Note: no touch device support; may take several minutes to load while Render's server starts up.
 
 #### KEYBOARD CONTROLS
 
